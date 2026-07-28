@@ -11,8 +11,8 @@ Migration `0042` is not applied on prod.
 ```
 
 ```js
-import { compileMd2 } from '@markus/md2';
-import '@markus/md2/md2.css';
+import { compileMd2 } from 'markus-md2';
+import 'markus-md2/md2.css';
 
 const html = await compileMd2(source);
 ```
@@ -20,14 +20,14 @@ const html = await compileMd2(source);
 ## Install
 
 ```bash
-npm install @markus/md2
+npm install markus-md2
 ```
 
 The package ships ESM only and needs Node 18+. It runs unchanged in the browser — the same compiler powers server-rendered and client-rendered views.
 
 ## Compiling
 
-Three entry points, all in `@markus/md2` (or `@markus/md2/compile`):
+Three entry points, all in `markus-md2` (or `markus-md2/compile`):
 
 | Function                          | Returns                       | Use when                                            |
 | --------------------------------- | ----------------------------- | --------------------------------------------------- |
@@ -85,7 +85,7 @@ Three colons inside, four outside. Same for `steps`/`step`, `columns`/`column`, 
 The stylesheet is plain CSS with no build step:
 
 ```js
-import '@markus/md2/md2.css';
+import 'markus-md2/md2.css';
 ```
 
 Every directive reads its colours from fifteen `--md2-*` custom properties, which by default alias [daisyUI](https://daisyui.com) semantic variables. Three ways to theme:
@@ -95,8 +95,8 @@ Every directive reads its colours from fifteen `--md2-*` custom properties, whic
 **You don't.** Load the standalone token layer alongside it:
 
 ```js
-import '@markus/md2/md2.css';
-import '@markus/md2/md2-host.css';
+import 'markus-md2/md2.css';
+import 'markus-md2/md2-host.css';
 ```
 
 **You have your own design system.** Map the tokens onto it — this is the whole integration:
@@ -120,7 +120,7 @@ Built-in alternate themes — sepia, newspaper, high-contrast, solarized — app
 Promote plain Markdown to MD2 before rendering. Conservative by design: it only rewrites patterns it recognises unambiguously, it never touches existing directives, and it's idempotent.
 
 ```js
-import { upgradeMarkdown } from '@markus/md2/upgrade';
+import { upgradeMarkdown } from 'markus-md2/upgrade';
 
 const { source, diagnostics } = upgradeMarkdown('> **Note:** heads up');
 // ':::callout{severity=info}\nheads up\n:::'

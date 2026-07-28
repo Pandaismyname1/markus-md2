@@ -4,8 +4,8 @@
  * (`--color-info`, `--color-base-100`, …). If your app doesn't ship daisyUI,
  * load this file alongside it and those variables are supplied here:
  *
- *   import '@markus/md2/md2.css';
- *   import '@markus/md2/md2-host.css';
+ *   import 'markus-md2/md2.css';
+ *   import 'markus-md2/md2-host.css';
  *
  * Light and dark are both defined. The OS preference applies through
  * `prefers-color-scheme`; an explicit `data-theme="light"` or `"dark"` on the

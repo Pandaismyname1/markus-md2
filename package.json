@@ -1,5 +1,5 @@
 {
-	"name": "@markus/md2",
+	"name": "markus-md2",
 	"version": "0.1.0",
 	"description": "MD2 — a directive layer over Markdown for AI-authored documents. Compiler, stylesheet, and Markdown-to-MD2 auto-upgrade.",
 	"keywords": [
