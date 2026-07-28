@@ -1,0 +1,111 @@
+/* Custom MD2 themes. Applied via `data-md2-theme` on the article wrapper.
+ *
+ * Each theme overrides the full `--md2-*` token set so every directive in
+ * the tier files keeps working. Daisy-derived themes don't need an entry
+ * here — they re-scope via `data-theme` and the regular md2.css aliases
+ * pick up the new daisyUI values automatically.
+ *
+ * Selector: `.md2[data-md2-theme='<slug>']`. Class + attribute beats the
+ * plain `.md2` rule in md2.css, so these overrides win.
+ *
+ * Soft-severity backgrounds use `color-mix` over `--md2-bg`, mirroring the
+ * pattern in md2.css. */
+
+/* ----------------------------- Sepia --------------------------------- */
+.md2[data-md2-theme='sepia'] {
+	--md2-bg: #f5ecd9;
+	--md2-bg-soft: #efe3c4;
+	--md2-border: #d8c79b;
+	--md2-text: #3b2a1a;
+	--md2-muted: #8a7551;
+
+	--md2-info: #4f6d8f;
+	--md2-warning: #a07028;
+	--md2-blocking: #a8442f;
+	--md2-success: #5e7a3a;
+	--md2-nit: #8a7c66;
+
+	--md2-info-bg: color-mix(in oklab, #4f6d8f 12%, #f5ecd9);
+	--md2-warning-bg: color-mix(in oklab, #a07028 14%, #f5ecd9);
+	--md2-blocking-bg: color-mix(in oklab, #a8442f 12%, #f5ecd9);
+	--md2-success-bg: color-mix(in oklab, #5e7a3a 14%, #f5ecd9);
+	--md2-nit-bg: color-mix(in oklab, #8a7c66 12%, #f5ecd9);
+
+	background: var(--md2-bg);
+	color: var(--md2-text);
+	font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+}
+
+/* --------------------------- Newspaper ------------------------------- */
+.md2[data-md2-theme='newspaper'] {
+	--md2-bg: #faf6ed;
+	--md2-bg-soft: #f1ebdc;
+	--md2-border: #cfc8b5;
+	--md2-text: #1a1a17;
+	--md2-muted: #5a5650;
+
+	--md2-info: #1d3a6e;
+	--md2-warning: #a07000;
+	--md2-blocking: #8a1c1c;
+	--md2-success: #2e5b2e;
+	--md2-nit: #73706a;
+
+	--md2-info-bg: color-mix(in oklab, #1d3a6e 10%, #faf6ed);
+	--md2-warning-bg: color-mix(in oklab, #a07000 14%, #faf6ed);
+	--md2-blocking-bg: color-mix(in oklab, #8a1c1c 10%, #faf6ed);
+	--md2-success-bg: color-mix(in oklab, #2e5b2e 12%, #faf6ed);
+	--md2-nit-bg: color-mix(in oklab, #73706a 10%, #faf6ed);
+
+	background: var(--md2-bg);
+	color: var(--md2-text);
+	font-family: 'Times New Roman', Times, 'Liberation Serif', Georgia, serif;
+}
+
+/* -------------------------- High contrast ---------------------------- */
+.md2[data-md2-theme='high-contrast'] {
+	--md2-bg: #ffffff;
+	--md2-bg-soft: #f4f4f4;
+	--md2-border: #000000;
+	--md2-text: #000000;
+	--md2-muted: #333333;
+
+	--md2-info: #0040c0;
+	--md2-warning: #c05000;
+	--md2-blocking: #c8001c;
+	--md2-success: #006a30;
+	--md2-nit: #444444;
+
+	--md2-info-bg: color-mix(in oklab, #0040c0 14%, #ffffff);
+	--md2-warning-bg: color-mix(in oklab, #c05000 16%, #ffffff);
+	--md2-blocking-bg: color-mix(in oklab, #c8001c 14%, #ffffff);
+	--md2-success-bg: color-mix(in oklab, #006a30 14%, #ffffff);
+	--md2-nit-bg: color-mix(in oklab, #444444 10%, #ffffff);
+
+	background: var(--md2-bg);
+	color: var(--md2-text);
+}
+
+/* --------------------------- Solarized ------------------------------- */
+.md2[data-md2-theme='solarized'] {
+	/* Ethan Schoonover's solarized-light. */
+	--md2-bg: #fdf6e3;
+	--md2-bg-soft: #eee8d5;
+	--md2-border: #93a1a1;
+	--md2-text: #586e75;
+	--md2-muted: #93a1a1;
+
+	--md2-info: #268bd2;
+	--md2-warning: #cb4b16;
+	--md2-blocking: #dc322f;
+	--md2-success: #859900;
+	--md2-nit: #657b83;
+
+	--md2-info-bg: color-mix(in oklab, #268bd2 12%, #fdf6e3);
+	--md2-warning-bg: color-mix(in oklab, #cb4b16 14%, #fdf6e3);
+	--md2-blocking-bg: color-mix(in oklab, #dc322f 12%, #fdf6e3);
+	--md2-success-bg: color-mix(in oklab, #859900 14%, #fdf6e3);
+	--md2-nit-bg: color-mix(in oklab, #657b83 10%, #fdf6e3);
+
+	background: var(--md2-bg);
+	color: var(--md2-text);
+}

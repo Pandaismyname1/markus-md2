@@ -1,0 +1,90 @@
+/* md2-host.css — token layer for hosts without daisyUI.
+ *
+ * `md2.css` derives every `--md2-*` token from daisyUI's semantic variables
+ * (`--color-info`, `--color-base-100`, …). If your app doesn't ship daisyUI,
+ * load this file alongside it and those variables are supplied here:
+ *
+ *   import '@markus/md2/md2.css';
+ *   import '@markus/md2/md2-host.css';
+ *
+ * Light and dark are both defined. The OS preference applies through
+ * `prefers-color-scheme`; an explicit `data-theme="light"` or `"dark"` on the
+ * root element overrides it in either direction.
+ *
+ * To adopt your own palette instead of this one, don't load this file — map
+ * the `--md2-*` tokens straight onto your design system's variables:
+ *
+ *   .md2 {
+ *     --md2-info: var(--your-accent);
+ *     --md2-warning: var(--your-warning);
+ *     --md2-blocking: var(--your-danger);
+ *     --md2-success: var(--your-success);
+ *     --md2-nit: var(--your-muted);
+ *     --md2-bg: var(--your-surface);
+ *     --md2-bg-soft: var(--your-surface-alt);
+ *     --md2-border: var(--your-border);
+ *     --md2-text: var(--your-text);
+ *     --md2-muted: var(--your-text-muted);
+ *     --md2-info-bg: var(--your-accent-tint);
+ *     --md2-warning-bg: var(--your-warning-tint);
+ *     --md2-blocking-bg: var(--your-danger-tint);
+ *     --md2-success-bg: var(--your-success-tint);
+ *     --md2-nit-bg: var(--your-surface-alt);
+ *   }
+ *
+ * That mapping is the whole integration — every directive reads through those
+ * fifteen tokens. */
+
+:root {
+	--color-base-100: #ffffff;
+	--color-base-200: #f4f4f5;
+	--color-base-300: #e4e4e7;
+	--color-base-content: #18181b;
+	--color-info: #0284c7;
+	--color-warning: #b45309;
+	--color-error: #dc2626;
+	--color-success: #15803d;
+	--color-neutral: #52525b;
+	color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme='light']) {
+		--color-base-100: #1d232a;
+		--color-base-200: #191e24;
+		--color-base-300: #2a323c;
+		--color-base-content: #e5e7eb;
+		--color-info: #38bdf8;
+		--color-warning: #fbbf24;
+		--color-error: #f87171;
+		--color-success: #4ade80;
+		--color-neutral: #9ca3af;
+		color-scheme: dark;
+	}
+}
+
+:root[data-theme='dark'] {
+	--color-base-100: #1d232a;
+	--color-base-200: #191e24;
+	--color-base-300: #2a323c;
+	--color-base-content: #e5e7eb;
+	--color-info: #38bdf8;
+	--color-warning: #fbbf24;
+	--color-error: #f87171;
+	--color-success: #4ade80;
+	--color-neutral: #9ca3af;
+	color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+	--color-base-100: #ffffff;
+	--color-base-200: #f4f4f5;
+	--color-base-300: #e4e4e7;
+	--color-base-content: #18181b;
+	--color-info: #0284c7;
+	--color-warning: #b45309;
+	--color-error: #dc2626;
+	--color-success: #15803d;
+	--color-neutral: #52525b;
+	color-scheme: light;
+}

@@ -1,0 +1,287 @@
+/* MD2 tier-2 directive styles: timeline, compare, tree.
+ * Tokens come from `.md2` in md2.css (which derives them from daisyUI). */
+
+/* ============================================================
+ * Timeline
+ * ============================================================ */
+
+.md2-timeline {
+	list-style: none;
+	padding: 0;
+	margin: 1rem 0;
+	position: relative;
+}
+
+.md2-timeline-event {
+	position: relative;
+	display: grid;
+	grid-template-columns: 1.5rem 1fr;
+	column-gap: 0.85rem;
+	padding: 0.45rem 0;
+	margin: 0;
+}
+/* Vertical connector — column 1, from top of one event to top of next. */
+.md2-timeline-event::before {
+	content: '';
+	position: absolute;
+	left: calc(0.75rem - 1px);
+	top: 1.2rem;
+	bottom: -0.45rem;
+	width: 2px;
+	background: var(--md2-border);
+	pointer-events: none;
+}
+.md2-timeline-event:last-child::before {
+	display: none;
+}
+
+.md2-timeline-dot {
+	grid-column: 1;
+	grid-row: 1 / span 99;
+	display: inline-block;
+	width: 0.85rem;
+	height: 0.85rem;
+	border-radius: 999px;
+	background: var(--md2-bg);
+	border: 2px solid var(--md2-muted);
+	margin-top: 0.35rem;
+	box-shadow: 0 0 0 3px var(--md2-bg);
+	align-self: start;
+	justify-self: center;
+}
+.md2-timeline-dot-info {
+	border-color: var(--md2-info);
+	background: var(--md2-info-bg);
+}
+.md2-timeline-dot-warning {
+	border-color: var(--md2-warning);
+	background: var(--md2-warning-bg);
+}
+.md2-timeline-dot-blocking {
+	border-color: var(--md2-blocking);
+	background: var(--md2-blocking-bg);
+}
+.md2-timeline-dot-nit {
+	border-color: var(--md2-nit);
+	background: var(--md2-nit-bg);
+}
+.md2-timeline-dot-success {
+	border-color: var(--md2-success);
+	background: var(--md2-success-bg);
+}
+
+.md2-timeline-when {
+	grid-column: 2;
+	display: block;
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 0.78rem;
+	color: var(--md2-muted);
+	margin-bottom: 0.15rem;
+}
+.md2-timeline-event > :not(.md2-timeline-dot):not(.md2-timeline-when) {
+	grid-column: 2;
+	margin: 0.15rem 0;
+}
+.md2-timeline-event-blocking .md2-timeline-when {
+	color: var(--md2-blocking);
+}
+.md2-timeline-event-warning .md2-timeline-when {
+	color: var(--md2-warning);
+}
+.md2-timeline-event-success .md2-timeline-when {
+	color: var(--md2-success);
+}
+.md2-timeline-event-info .md2-timeline-when {
+	color: var(--md2-info);
+}
+
+/* ============================================================
+ * Compare / option (diff + vote modes)
+ * ============================================================ */
+
+.md2-compare {
+	margin: 1rem 0;
+	border: 1px solid var(--md2-border);
+	border-radius: var(--md2-radius);
+	background: var(--md2-bg-soft);
+	padding: 0.75rem 0.9rem 0.9rem;
+}
+.md2-compare-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 0.85rem;
+}
+.md2-compare-option {
+	display: flex;
+	flex-direction: column;
+	background: var(--md2-bg);
+	border: 1px solid var(--md2-border);
+	border-radius: var(--md2-radius);
+	padding: 0.7rem 0.85rem 0.85rem;
+	min-width: 0;
+}
+.md2-compare-option-info {
+	border-color: color-mix(in oklab, var(--md2-info) 40%, var(--md2-border));
+}
+.md2-compare-option-warning {
+	border-color: color-mix(in oklab, var(--md2-warning) 40%, var(--md2-border));
+}
+.md2-compare-option-blocking {
+	border-color: color-mix(in oklab, var(--md2-blocking) 40%, var(--md2-border));
+}
+.md2-compare-option-success {
+	border-color: color-mix(in oklab, var(--md2-success) 40%, var(--md2-border));
+}
+.md2-compare-option-nit {
+	border-color: color-mix(in oklab, var(--md2-nit) 40%, var(--md2-border));
+}
+
+.md2-compare-option-header {
+	display: flex;
+	align-items: center;
+	gap: 0.55rem;
+	margin: 0 0 0.45rem;
+}
+.md2-compare-option-key {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 700;
+	font-size: 0.85rem;
+	min-width: 1.5rem;
+	height: 1.5rem;
+	padding: 0 0.4rem;
+	border-radius: 6px;
+	background: var(--md2-info-bg);
+	color: var(--md2-info);
+	border: 1px solid color-mix(in oklab, var(--md2-info) 30%, transparent);
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.md2-compare-option-warning > .md2-compare-option-header > .md2-compare-option-key {
+	background: var(--md2-warning-bg);
+	color: var(--md2-warning);
+	border-color: color-mix(in oklab, var(--md2-warning) 30%, transparent);
+}
+.md2-compare-option-blocking > .md2-compare-option-header > .md2-compare-option-key {
+	background: var(--md2-blocking-bg);
+	color: var(--md2-blocking);
+	border-color: color-mix(in oklab, var(--md2-blocking) 30%, transparent);
+}
+.md2-compare-option-success > .md2-compare-option-header > .md2-compare-option-key {
+	background: var(--md2-success-bg);
+	color: var(--md2-success);
+	border-color: color-mix(in oklab, var(--md2-success) 30%, transparent);
+}
+.md2-compare-option-nit > .md2-compare-option-header > .md2-compare-option-key {
+	background: var(--md2-nit-bg);
+	color: var(--md2-nit);
+}
+
+.md2-compare-option-label {
+	font-weight: 700;
+	font-size: 0.95rem;
+	line-height: 1.3;
+	color: var(--md2-text);
+	flex: 1 1 auto;
+	min-width: 0;
+}
+.md2-compare-option > :not(.md2-compare-option-header) {
+	margin: 0.3rem 0;
+}
+.md2-compare-option > :not(.md2-compare-option-header):first-of-type {
+	margin-top: 0;
+}
+
+.md2-compare-vote .md2-compare-option {
+	transition:
+		border-color 0.15s,
+		transform 0.15s;
+}
+.md2-compare-vote .md2-compare-option:hover {
+	border-color: var(--md2-info);
+	transform: translateY(-1px);
+}
+
+/* ============================================================
+ * Tree — ASCII-style nested list with box-drawing connectors.
+ * ============================================================ */
+
+.md2-tree-root {
+	margin: 1rem 0;
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 0.88rem;
+	line-height: 1.55;
+	color: var(--md2-text);
+	background: var(--md2-bg-soft);
+	border: 1px solid var(--md2-border);
+	border-radius: var(--md2-radius);
+	padding: 0.6rem 0.9rem;
+	overflow-x: auto;
+}
+.md2-tree-title {
+	font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.md2-tree,
+.md2-tree-children {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.md2-tree > .md2-tree-item {
+	padding-left: 0;
+}
+.md2-tree > .md2-tree-item::before {
+	content: '';
+}
+
+.md2-tree-children {
+	padding-left: 1.25rem;
+	position: relative;
+}
+.md2-tree-children > .md2-tree-item {
+	position: relative;
+	padding-left: 1.5rem;
+}
+.md2-tree-children > .md2-tree-item::before {
+	content: '├── ';
+	position: absolute;
+	left: 0;
+	top: 0;
+	color: var(--md2-muted);
+	white-space: pre;
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.md2-tree-children > .md2-tree-item-last::before {
+	content: '└── ';
+}
+.md2-tree-children > .md2-tree-item::after {
+	content: '';
+	position: absolute;
+	left: 0.32rem;
+	top: 1.4rem;
+	bottom: -0.05rem;
+	width: 0;
+	border-left: 1px solid var(--md2-border);
+}
+.md2-tree-children > .md2-tree-item-last::after {
+	display: none;
+}
+.md2-tree-children > .md2-tree-item-leaf::after {
+	bottom: -0.05rem;
+}
+
+.md2-tree-item .md2-badge,
+.md2-tree-item .md2-jump {
+	margin-left: 0.4rem;
+}
+
+.md2-tree-item > p {
+	margin: 0;
+	display: inline;
+}
+.md2-tree-item > ul {
+	display: block;
+	margin-top: 0.1rem;
+}

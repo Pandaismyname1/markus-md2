@@ -1,0 +1,280 @@
+/* MD2 tier-1 directive styles: tabs, steps, figure.
+ * Tokens come from `.md2` in md2.css (which derives them from daisyUI). */
+
+/* ============================================================
+ * Tabs — pure-CSS radio-driven switcher.
+ * ============================================================ */
+
+.md2-tabs {
+	margin: 1rem 0;
+	border: 1px solid var(--md2-border);
+	border-radius: var(--md2-radius);
+	background: var(--md2-bg);
+	overflow: hidden;
+}
+
+/* Hide the radio inputs but keep them focusable. */
+.md2-tabs-input {
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+	width: 0;
+	height: 0;
+}
+
+.md2-tabs-bar {
+	display: flex;
+	flex-wrap: wrap;
+	border-bottom: 1px solid var(--md2-border);
+	background: var(--md2-bg-soft);
+}
+
+.md2-tabs-label {
+	flex: 0 0 auto;
+	padding: 0.55rem 1rem;
+	margin: 0;
+	cursor: pointer;
+	font-size: 0.85rem;
+	font-weight: 600;
+	color: var(--md2-muted);
+	border-bottom: 2px solid transparent;
+	user-select: none;
+	transition:
+		color 0.15s,
+		border-color 0.15s,
+		background 0.15s;
+}
+.md2-tabs-label:hover {
+	color: var(--md2-text);
+	background: color-mix(in oklab, var(--md2-info) 5%, transparent);
+}
+.md2-tabs-input:focus-visible + .md2-tabs-bar > .md2-tabs-label,
+.md2-tabs-label:focus-visible {
+	outline: 2px solid var(--md2-info);
+	outline-offset: -2px;
+}
+
+.md2-tabs-panel {
+	display: none;
+	padding: 0.85rem 1rem;
+}
+
+/* Pure-CSS switch: an `:nth-of-type(N):checked` input picks the matching
+ * label + panel. DOM order in dir-tabs.ts: all inputs, then bar
+ * (labels), then panels — so we walk siblings forward from each input. */
+.md2-tabs-input:nth-of-type(1):checked ~ .md2-tabs-panels > .md2-tabs-panel:nth-of-type(1),
+.md2-tabs-input:nth-of-type(2):checked ~ .md2-tabs-panels > .md2-tabs-panel:nth-of-type(2),
+.md2-tabs-input:nth-of-type(3):checked ~ .md2-tabs-panels > .md2-tabs-panel:nth-of-type(3),
+.md2-tabs-input:nth-of-type(4):checked ~ .md2-tabs-panels > .md2-tabs-panel:nth-of-type(4),
+.md2-tabs-input:nth-of-type(5):checked ~ .md2-tabs-panels > .md2-tabs-panel:nth-of-type(5),
+.md2-tabs-input:nth-of-type(6):checked ~ .md2-tabs-panels > .md2-tabs-panel:nth-of-type(6),
+.md2-tabs-input:nth-of-type(7):checked ~ .md2-tabs-panels > .md2-tabs-panel:nth-of-type(7),
+.md2-tabs-input:nth-of-type(8):checked ~ .md2-tabs-panels > .md2-tabs-panel:nth-of-type(8) {
+	display: block;
+}
+
+.md2-tabs-input:nth-of-type(1):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(1),
+.md2-tabs-input:nth-of-type(2):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(2),
+.md2-tabs-input:nth-of-type(3):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(3),
+.md2-tabs-input:nth-of-type(4):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(4),
+.md2-tabs-input:nth-of-type(5):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(5),
+.md2-tabs-input:nth-of-type(6):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(6),
+.md2-tabs-input:nth-of-type(7):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(7),
+.md2-tabs-input:nth-of-type(8):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(8) {
+	color: var(--md2-info);
+	border-bottom-color: var(--md2-info);
+	background: var(--md2-bg);
+}
+
+@media (max-width: 480px) {
+	.md2-tabs-bar {
+		flex-direction: column;
+	}
+	.md2-tabs-label {
+		border-bottom: 1px solid var(--md2-border);
+		border-left: 2px solid transparent;
+	}
+	.md2-tabs-input:checked ~ .md2-tabs-bar > .md2-tabs-label {
+		border-bottom-color: var(--md2-border);
+	}
+	.md2-tabs-input:nth-of-type(1):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(1),
+	.md2-tabs-input:nth-of-type(2):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(2),
+	.md2-tabs-input:nth-of-type(3):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(3),
+	.md2-tabs-input:nth-of-type(4):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(4),
+	.md2-tabs-input:nth-of-type(5):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(5),
+	.md2-tabs-input:nth-of-type(6):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(6),
+	.md2-tabs-input:nth-of-type(7):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(7),
+	.md2-tabs-input:nth-of-type(8):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(8) {
+		border-left-color: var(--md2-info);
+	}
+}
+
+/* ============================================================
+ * Steps — vertical list with markers + connector line.
+ * ============================================================ */
+
+.md2-steps {
+	list-style: none;
+	counter-reset: md2-step var(--md2-steps-start, 0);
+	padding: 0;
+	margin: 1rem 0;
+}
+.md2-steps[start='1'] {
+	--md2-steps-start: 0;
+}
+.md2-steps[start='2'] {
+	--md2-steps-start: 1;
+}
+.md2-steps[start='3'] {
+	--md2-steps-start: 2;
+}
+.md2-steps[start='4'] {
+	--md2-steps-start: 3;
+}
+.md2-steps[start='5'] {
+	--md2-steps-start: 4;
+}
+
+.md2-step {
+	position: relative;
+	display: grid;
+	grid-template-columns: 2.25rem 1fr;
+	gap: 0.85rem;
+	padding: 0.25rem 0 1.1rem;
+	counter-increment: md2-step;
+}
+.md2-step::before {
+	content: '';
+	position: absolute;
+	left: calc(2.25rem / 2 - 1px);
+	top: 2.25rem;
+	bottom: 0;
+	width: 2px;
+	background: var(--md2-border);
+}
+.md2-step:last-child::before {
+	display: none;
+}
+
+.md2-step-marker {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.25rem;
+	height: 2.25rem;
+	border-radius: 999px;
+	background: var(--md2-bg);
+	border: 2px solid var(--md2-border);
+	color: var(--md2-muted);
+	font-weight: 700;
+	font-size: 0.85rem;
+	font-variant-numeric: tabular-nums;
+	z-index: 1;
+}
+.md2-step-marker::before {
+	content: counter(md2-step);
+}
+
+.md2-step-current > .md2-step-marker {
+	border-color: var(--md2-info);
+	color: var(--md2-info);
+	background: var(--md2-info-bg);
+	box-shadow: 0 0 0 4px color-mix(in oklab, var(--md2-info) 12%, transparent);
+}
+.md2-step-done > .md2-step-marker {
+	border-color: var(--md2-success);
+	background: var(--md2-success);
+	color: var(--color-success-content, #fff);
+}
+.md2-step-done > .md2-step-marker::before {
+	content: '✓';
+}
+.md2-step-pending > .md2-step-marker {
+	opacity: 0.6;
+}
+
+.md2-step-content {
+	min-width: 0;
+	padding-top: 0.15rem;
+}
+.md2-step-header {
+	font-weight: 600;
+	font-size: 1rem;
+	margin: 0 0 0.25rem;
+	color: var(--md2-text);
+}
+.md2-step-current > .md2-step-content > .md2-step-header {
+	color: var(--md2-info);
+}
+.md2-step-body > :first-child {
+	margin-top: 0;
+}
+.md2-step-body > :last-child {
+	margin-bottom: 0;
+}
+
+.md2-step-sev-blocking > .md2-step-marker {
+	border-color: var(--md2-blocking);
+	color: var(--md2-blocking);
+}
+.md2-step-sev-warning > .md2-step-marker {
+	border-color: var(--md2-warning);
+	color: var(--md2-warning);
+}
+.md2-step-sev-success > .md2-step-marker {
+	border-color: var(--md2-success);
+	color: var(--md2-success);
+}
+.md2-step-sev-nit > .md2-step-marker {
+	border-color: var(--md2-nit);
+	color: var(--md2-nit);
+}
+
+/* ============================================================
+ * Figure
+ * ============================================================ */
+
+.md2-figure {
+	margin: 1.2rem 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5rem;
+}
+.md2-figure-img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	border-radius: var(--md2-radius);
+	border: 1px solid var(--md2-border);
+	background: var(--md2-bg-soft);
+}
+.md2-figure-link {
+	display: inline-block;
+	max-width: 100%;
+	line-height: 0;
+	text-decoration: none;
+	border-bottom: 0;
+}
+.md2-figure-caption {
+	text-align: center;
+	font-size: 0.85rem;
+	color: var(--md2-muted);
+	line-height: 1.5;
+	max-width: 60ch;
+}
+.md2-figure-caption > p {
+	margin: 0;
+}
+.md2-figure-credit {
+	display: block;
+	font-style: italic;
+	font-size: 0.78rem;
+	color: var(--md2-muted);
+	margin-top: 0.2rem;
+}
+.md2-figure-credit::before {
+	content: '— ';
+	opacity: 0.7;
+}

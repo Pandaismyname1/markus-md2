@@ -1,0 +1,603 @@
+/* MD2 directive styles. Plain CSS so any consumer can drop in.
+ *
+ * Tokens (`--md2-*`) are derived from daisyUI v5 semantic variables
+ * (`--color-base-100`, `--color-base-content`, `--color-info`, ...). That
+ * means flipping `data-theme` on the document root re-themes every MD2
+ * directive automatically. If daisyUI isn't wired up, the
+ * `@supports not (color: oklch(0 0 0))` fallback at the bottom keeps the
+ * old hex values working. */
+
+@import './dir-tier-1.css';
+@import './dir-tier-2.css';
+@import './dir-tier-3.css';
+@import './themes.css';
+
+.md2 {
+	--md2-radius: 0.5rem;
+
+	/* Severity colours map to daisyUI semantics. */
+	--md2-info: var(--color-info);
+	--md2-warning: var(--color-warning);
+	--md2-blocking: var(--color-error);
+	--md2-success: var(--color-success);
+	--md2-nit: var(--color-neutral);
+
+	/* Surfaces / text. */
+	--md2-bg: var(--color-base-100);
+	--md2-bg-soft: var(--color-base-200);
+	--md2-border: var(--color-base-300);
+	--md2-text: var(--color-base-content);
+	--md2-muted: color-mix(in oklab, var(--color-base-content) 60%, var(--color-base-100));
+
+	/* Soft per-severity backgrounds: low-saturation tint over base-100. */
+	--md2-info-bg: color-mix(in oklab, var(--color-info) 12%, var(--color-base-100));
+	--md2-warning-bg: color-mix(in oklab, var(--color-warning) 12%, var(--color-base-100));
+	--md2-blocking-bg: color-mix(in oklab, var(--color-error) 12%, var(--color-base-100));
+	--md2-success-bg: color-mix(in oklab, var(--color-success) 14%, var(--color-base-100));
+	--md2-nit-bg: color-mix(in oklab, var(--color-neutral) 10%, var(--color-base-100));
+
+	font-family:
+		ui-sans-serif,
+		system-ui,
+		-apple-system,
+		'Segoe UI',
+		Roboto,
+		'Helvetica Neue',
+		Arial,
+		sans-serif;
+	color: var(--md2-text);
+	line-height: 1.65;
+}
+
+.md2 h1,
+.md2 h2,
+.md2 h3 {
+	font-weight: 700;
+	line-height: 1.25;
+	margin: 1.5em 0 0.6em;
+}
+.md2 h1 {
+	font-size: 1.875rem;
+}
+.md2 h2 {
+	font-size: 1.4rem;
+}
+.md2 h3 {
+	font-size: 1.15rem;
+}
+.md2 p {
+	margin: 0.7em 0;
+}
+.md2 ul,
+.md2 ol {
+	padding-left: 1.5em;
+	margin: 0.7em 0;
+}
+.md2 ul {
+	list-style: disc;
+}
+.md2 ol {
+	list-style: decimal;
+}
+.md2 :not(pre) > code:not(.md2-code-src) {
+	background: var(--md2-bg-soft);
+	border: 1px solid var(--md2-border);
+	border-radius: 4px;
+	padding: 0.1em 0.35em;
+	font-size: 0.9em;
+}
+.md2 a {
+	color: var(--md2-info);
+	text-decoration: underline;
+}
+
+/* ------------------------------------------------------------------ *
+ * Callout
+ * ------------------------------------------------------------------ */
+.md2-callout {
+	border-left: 4px solid var(--md2-info);
+	background: var(--md2-info-bg);
+	border-radius: 0 var(--md2-radius) var(--md2-radius) 0;
+	padding: 0.85rem 1rem;
+	margin: 1rem 0;
+}
+.md2-callout-warning {
+	border-left-color: var(--md2-warning);
+	background: var(--md2-warning-bg);
+}
+.md2-callout-blocking {
+	border-left-color: var(--md2-blocking);
+	background: var(--md2-blocking-bg);
+}
+.md2-callout-nit {
+	border-left-color: var(--md2-nit);
+	background: var(--md2-nit-bg);
+}
+.md2-callout-success {
+	border-left-color: var(--md2-success);
+	background: var(--md2-success-bg);
+}
+
+.md2-callout-title {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	font-weight: 700;
+	margin-bottom: 0.25rem;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	font-size: 0.75rem;
+	color: var(--md2-muted);
+}
+.md2-callout-icon,
+.md2-badge-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	color: inherit;
+}
+.md2-callout-icon {
+	width: 1rem;
+	height: 1rem;
+	flex-basis: 1rem;
+}
+.md2-badge-icon {
+	width: 0.85rem;
+	height: 0.85rem;
+	flex-basis: 0.85rem;
+}
+.md2-callout-icon svg,
+.md2-badge-icon svg {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+.md2-callout-title-icon-only {
+	display: inline-flex;
+	margin-bottom: 0.35rem;
+}
+.md2-callout-dismissible {
+	position: relative;
+	padding-right: 2.25rem;
+}
+.md2-callout-dismiss {
+	position: absolute;
+	top: 0.35rem;
+	right: 0.45rem;
+	background: transparent;
+	border: 0;
+	color: var(--md2-muted);
+	font-size: 1.15rem;
+	line-height: 1;
+	cursor: pointer;
+	padding: 0.15rem 0.4rem;
+	border-radius: 4px;
+}
+.md2-callout-dismiss:hover {
+	background: color-mix(in oklab, var(--md2-text) 8%, transparent);
+	color: var(--md2-text);
+}
+.md2-callout-dismiss:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 1px;
+}
+
+/* ------------------------------------------------------------------ *
+ * Columns
+ * ------------------------------------------------------------------ */
+.md2-columns {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(var(--md2-cols-min, 220px), 1fr));
+	gap: var(--md2-cols-gap, 1rem);
+	margin: 1rem 0;
+}
+.md2-column {
+	background: var(--md2-bg);
+	border: 1px solid var(--md2-border);
+	border-radius: var(--md2-radius);
+	padding: 0.9rem 1rem;
+}
+
+/* ------------------------------------------------------------------ *
+ * Details
+ * ------------------------------------------------------------------ */
+.md2-details {
+	border: 1px solid var(--md2-border);
+	border-radius: var(--md2-radius);
+	padding: 0.5rem 0.9rem;
+	margin: 0.8rem 0;
+	background: var(--md2-bg-soft);
+}
+.md2-details[open] {
+	background: var(--md2-bg);
+}
+.md2-details-summary {
+	cursor: pointer;
+	font-weight: 600;
+	list-style: none;
+}
+.md2-details-summary::-webkit-details-marker {
+	display: none;
+}
+.md2-details-summary::before {
+	content: '▸ ';
+	display: inline-block;
+	transition: transform 0.15s;
+}
+.md2-details[open] > .md2-details-summary::before {
+	content: '▾ ';
+}
+
+/* ------------------------------------------------------------------ *
+ * Risk map
+ * ------------------------------------------------------------------ */
+.md2-risk-map {
+	border: 1px solid var(--md2-border);
+	border-radius: var(--md2-radius);
+	padding: 0.6rem 0.9rem;
+	background: var(--md2-bg-soft);
+	margin: 1rem 0;
+}
+.md2-risk-map-title,
+.md2-timeline-title,
+.md2-tree-title,
+.md2-flow-title,
+.md2-chart-title,
+.md2-compare-title {
+	display: block;
+	font-weight: 700;
+	font-size: 0.8rem;
+	color: var(--md2-muted);
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	margin-bottom: 0.4rem;
+}
+.md2-risk-map ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.md2-risk-map li {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.2rem 0;
+	border-bottom: 1px dashed var(--md2-border);
+}
+.md2-risk-map li:last-child {
+	border-bottom: 0;
+}
+
+/* ------------------------------------------------------------------ *
+ * Badge — pill, severity-tinted.
+ * ------------------------------------------------------------------ */
+.md2-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+	font-size: 0.7rem;
+	font-weight: 700;
+	padding: 0.1rem 0.5rem;
+	border-radius: 999px;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	background: var(--md2-nit-bg);
+	color: var(--md2-nit);
+	border: 1px solid var(--md2-border);
+	vertical-align: middle;
+}
+.md2-badge-blocking {
+	background: var(--md2-blocking-bg);
+	color: var(--md2-blocking);
+	border-color: color-mix(in oklab, var(--md2-blocking) 30%, transparent);
+}
+.md2-badge-warning {
+	background: var(--md2-warning-bg);
+	color: var(--md2-warning);
+	border-color: color-mix(in oklab, var(--md2-warning) 30%, transparent);
+}
+.md2-badge-info {
+	background: var(--md2-info-bg);
+	color: var(--md2-info);
+	border-color: color-mix(in oklab, var(--md2-info) 30%, transparent);
+}
+.md2-badge-nit {
+	background: var(--md2-nit-bg);
+	color: var(--md2-nit);
+}
+.md2-badge-success {
+	background: var(--md2-success-bg);
+	color: var(--md2-success);
+	border-color: color-mix(in oklab, var(--md2-success) 30%, transparent);
+}
+.md2-icon-glyph {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+	font-style: normal;
+}
+
+/* ------------------------------------------------------------------ *
+ * Jump link
+ * ------------------------------------------------------------------ */
+.md2-jump {
+	font-size: 0.8rem;
+	color: var(--md2-info);
+	text-decoration: none;
+	border-bottom: 1px dashed currentColor;
+}
+.md2-jump::before {
+	content: '↪ ';
+	opacity: 0.6;
+}
+
+/* ------------------------------------------------------------------ *
+ * Annotated code
+ *
+ * The code-block aesthetic is intentionally dark in both themes — code
+ * editors are conventionally dark, and the Dracula token palette below
+ * is tuned for that. The dark backdrop (`#0f172a` / `#1e293b`) is kept
+ * as a hard-coded shell so token contrast stays consistent across the
+ * site theme.
+ * ------------------------------------------------------------------ */
+.md2-annotate-code {
+	--md2-code-bg: #0f172a;
+	--md2-code-bg-2: #1e293b;
+	--md2-code-fg: #e2e8f0;
+	--md2-code-muted: #94a3b8;
+	border: 1px solid var(--md2-border);
+	border-radius: var(--md2-radius);
+	overflow: clip;
+	margin: 1rem 0;
+	background: var(--md2-code-bg);
+	color: var(--md2-code-fg);
+}
+.md2-annotate-code-caption {
+	background: var(--md2-code-bg-2);
+	color: var(--md2-code-muted);
+	padding: 0.3rem 0.9rem;
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.md2-annotate-code-summary {
+	cursor: pointer;
+	list-style: none;
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	user-select: none;
+}
+.md2-annotate-code-summary::-webkit-details-marker {
+	display: none;
+}
+.md2-annotate-code-summary::before {
+	content: '▸';
+	display: inline-block;
+	color: var(--md2-code-muted);
+	font-size: 0.7rem;
+	transition: transform 0.15s;
+}
+.md2-annotate-code-collapsible[open] > .md2-annotate-code-summary::before {
+	content: '▾';
+}
+.md2-annotate-code-lang {
+	font-weight: 700;
+}
+.md2-annotate-code-meta {
+	margin-left: auto;
+	display: flex;
+	gap: 0.4rem;
+	align-items: center;
+	text-transform: none;
+	letter-spacing: 0;
+	font-size: 0.7rem;
+	color: var(--md2-code-muted);
+}
+.md2-annotate-code-collapsible:not([open]) .md2-annotate-code-body {
+	display: none;
+}
+.md2-annotate-code-body {
+	margin: 0;
+	padding: 0.6rem 0 0;
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 0.85rem;
+	line-height: 1.55;
+	overflow-x: auto;
+	overflow-y: hidden;
+	scrollbar-width: auto;
+	scrollbar-color: #64748b var(--md2-code-bg-2);
+}
+.md2-annotate-code-body::-webkit-scrollbar {
+	height: 14px;
+}
+.md2-annotate-code-body::-webkit-scrollbar-thumb {
+	background: #64748b;
+	border-radius: 7px;
+	border: 3px solid var(--md2-code-bg-2);
+	min-width: 40px;
+}
+.md2-annotate-code-body::-webkit-scrollbar-thumb:hover {
+	background: #94a3b8;
+}
+.md2-annotate-code-body::-webkit-scrollbar-track {
+	background: var(--md2-code-bg-2);
+}
+.md2-code-row {
+	display: block;
+	width: max-content;
+	min-width: 100%;
+}
+.md2-code-row-blocking {
+	background: color-mix(in srgb, var(--md2-blocking) 22%, var(--md2-code-bg));
+}
+.md2-code-row-nit {
+	background: color-mix(in srgb, var(--md2-nit) 24%, var(--md2-code-bg));
+}
+.md2-code-row-warning {
+	background: color-mix(in srgb, var(--md2-warning) 22%, var(--md2-code-bg));
+}
+.md2-code-row-info {
+	background: color-mix(in srgb, var(--md2-info) 22%, var(--md2-code-bg));
+}
+.md2-code-line {
+	display: grid;
+	grid-template-columns: 3.5rem 1fr;
+	align-items: center;
+	gap: 0.6rem;
+	padding: 0 0.9rem;
+}
+.md2-code-ln {
+	color: #64748b;
+	user-select: none;
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+}
+.md2-code-src {
+	white-space: pre;
+	background: transparent;
+	border: 0;
+	padding: 0;
+	color: inherit;
+	font-family: inherit;
+	font-size: inherit;
+}
+
+/* Prism token theme — Dracula-inspired, vivid on figure bg. */
+.md2-annotate-code .md2-code-src {
+	color: #f8f8f2;
+}
+.md2-annotate-code .token.comment,
+.md2-annotate-code .token.prolog,
+.md2-annotate-code .token.doctype,
+.md2-annotate-code .token.cdata {
+	color: #6272a4;
+	font-style: italic;
+}
+.md2-annotate-code .token.punctuation {
+	color: #f8f8f2;
+}
+.md2-annotate-code .token.namespace {
+	opacity: 0.9;
+}
+.md2-annotate-code .token.property,
+.md2-annotate-code .token.tag,
+.md2-annotate-code .token.constant,
+.md2-annotate-code .token.symbol,
+.md2-annotate-code .token.deleted,
+.md2-annotate-code .token.operator,
+.md2-annotate-code .token.entity,
+.md2-annotate-code .token.url {
+	color: #ff79c6;
+}
+.md2-annotate-code .token.boolean,
+.md2-annotate-code .token.number {
+	color: #bd93f9;
+}
+.md2-annotate-code .token.selector,
+.md2-annotate-code .token.attr-name,
+.md2-annotate-code .token.string,
+.md2-annotate-code .token.char,
+.md2-annotate-code .token.builtin,
+.md2-annotate-code .token.inserted {
+	color: #f1fa8c;
+}
+.md2-annotate-code .token.variable {
+	color: #f8f8f2;
+}
+.md2-annotate-code .token.atrule,
+.md2-annotate-code .token.attr-value,
+.md2-annotate-code .token.keyword {
+	color: #ff79c6;
+	font-weight: 600;
+}
+.md2-annotate-code .token.function,
+.md2-annotate-code .token.class-name {
+	color: #50fa7b;
+}
+.md2-annotate-code .token.regex,
+.md2-annotate-code .token.important {
+	color: #ffb86c;
+}
+.md2-annotate-code .token.important,
+.md2-annotate-code .token.bold {
+	font-weight: 700;
+}
+.md2-annotate-code .token.italic {
+	font-style: italic;
+}
+.md2-code-ann-row {
+	padding: 0.3rem 0.9rem 0.45rem 5rem;
+	font-family: ui-sans-serif, system-ui, sans-serif;
+	font-size: 0.78rem;
+	line-height: 1.45;
+	color: var(--md2-code-fg);
+}
+.md2-code-ann-row .md2-badge {
+	margin-right: 0.4rem;
+	vertical-align: baseline;
+}
+
+/* ------------------------------------------------------------------ *
+ * W5.M — focus mode. Toggled by `.md2--focus` on the article wrapper.
+ * The active section is tagged element-by-element by `useFocusMode`
+ * (no DOM wrapping), so we dim *everything* under `.md2--focus` and
+ * then bring back opacity on `.md2-section--focused` siblings.
+ * ------------------------------------------------------------------ */
+.md2--focus
+	:where(
+		h2,
+		h3,
+		p,
+		ul,
+		ol,
+		blockquote,
+		pre,
+		table,
+		.md2-callout,
+		.md2-steps,
+		.md2-tabs,
+		.md2-figure,
+		.md2-annotate-code,
+		.md2-columns,
+		.md2-details,
+		.md2-risk-map,
+		.md2-timeline,
+		.md2-flow,
+		.md2-chart,
+		.md2-compare,
+		.md2-tree
+	) {
+	transition: opacity 200ms ease;
+	opacity: 0.35;
+}
+.md2--focus .md2-section--focused,
+.md2--focus
+	.md2-section--focused:where(
+		h2,
+		h3,
+		p,
+		ul,
+		ol,
+		blockquote,
+		pre,
+		table,
+		.md2-callout,
+		.md2-steps,
+		.md2-tabs,
+		.md2-figure,
+		.md2-annotate-code,
+		.md2-columns,
+		.md2-details,
+		.md2-risk-map,
+		.md2-timeline,
+		.md2-flow,
+		.md2-chart,
+		.md2-compare,
+		.md2-tree
+	) {
+	opacity: 1;
+}
