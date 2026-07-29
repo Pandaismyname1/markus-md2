@@ -27,7 +27,14 @@ const result = await build({
 	sourcemap: false,
 	legalComments: 'none',
 	metafile: true,
-	define: { 'process.env.NODE_ENV': '"production"' }
+	define: { 'process.env.NODE_ENV': '"production"' },
+	// Prism's main entry bundles its auto-run: on import it would register a
+	// DOMContentLoaded handler, highlight the *host* page's DOM, and fetch every
+	// `pre[data-src]` URL it finds there. Importing a compiler must not touch the
+	// document it was imported into. Prism reads this flag at init.
+	banner: {
+		js: 'globalThis.Prism = globalThis.Prism || { manual: true };'
+	}
 });
 
 /* The flattened stylesheet ships next to it so a page needs exactly two

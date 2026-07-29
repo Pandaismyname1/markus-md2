@@ -11,7 +11,7 @@ import { applyTreeDirective } from './dir-tree.js';
 import { applyFlowDirective } from './dir-flow.js';
 import { applyChartDirective } from './dir-chart.js';
 import { emitDiagnosticAt, suggestClosest } from './diagnostics.js';
-import { coerceSeverity, extractLabel } from './md2-utils.js';
+import { coerceCssLength, coerceSeverity, extractLabel } from './md2-utils.js';
 import type { DirectiveAttrs, MutableNode, Severity } from './md2-types.js';
 
 /** Canonical list of supported directives — used for unknown-name diagnostics. */
@@ -210,8 +210,14 @@ export function md2DirectiveTransform() {
 				case 'columns': {
 					data.hName = 'div';
 					data.hProperties = { className: ['md2-columns'] };
-					const min = attrs.min || '220px';
-					const gap = attrs.gap || '1rem';
+					// These land inside a style attribute, so a value carrying a
+					// semicolon would close the declaration and open arbitrary ones
+					// — enough for a full-viewport overlay or an outbound url().
+					// A CSS length is a short, well-defined shape; anything else
+					// falls back to the default rather than being escaped, because
+					// there's no legitimate reason for it here.
+					const min = coerceCssLength(attrs.min, '220px');
+					const gap = coerceCssLength(attrs.gap, '1rem');
 					const colsRaw = attrs.cols;
 					const colsNum = colsRaw != null ? parseInt(String(colsRaw), 10) : NaN;
 					if (Number.isFinite(colsNum) && colsNum > 0) {
@@ -477,8 +483,12 @@ function transformAnnotateCode(node: MutableNode, attrs: DirectiveAttrs): void {
 		const list = annsByStartLine.get(a.line) || [];
 		list.push(a);
 		annsByStartLine.set(a.line, list);
-		const from = a.line;
-		const to = a.endLine != null ? a.endLine : a.line;
+		// Clamp to the code we actually have. The range comes from user text
+		// (`@1-1000000000`), and iterating it unclamped allocates one Map entry
+		// per line in the range — 71 bytes of input is enough to exhaust the heap
+		// and take the process down, which no caller can catch.
+		const from = Math.max(1, a.line);
+		const to = Math.min(a.endLine != null ? a.endLine : a.line, lines.length);
 		for (let ln = from; ln <= to; ln++) {
 			tintByLine.set(ln, a.severity);
 		}

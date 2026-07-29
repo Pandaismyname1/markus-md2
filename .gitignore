@@ -4,3 +4,6 @@ dist/
 .DS_Store
 .vitest/
 coverage/
+
+# Scratch files from local experiments
+_probe_*.mjs

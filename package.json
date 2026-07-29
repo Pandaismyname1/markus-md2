@@ -1,6 +1,6 @@
 {
 	"name": "markus-md2",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "MD2 — a directive layer over Markdown for AI-authored documents. Compiler, stylesheet, and Markdown-to-MD2 auto-upgrade.",
 	"keywords": [
 		"markdown",
@@ -44,6 +44,7 @@
 		"./md2.css": "./css/md2.css",
 		"./md2-host.css": "./css/md2-host.css",
 		"./md2.bundle.css": "./dist/md2.bundle.css",
+		"./md2.standalone.css": "./dist/md2.standalone.css",
 		"./css/*": "./css/*",
 		"./fixtures/*": "./fixtures/*",
 		"./package.json": "./package.json"
@@ -57,6 +58,8 @@
 		"LICENSE"
 	],
 	"scripts": {
+		"//prepare": "Runs on git installs (npm skips prepublishOnly there), so `npm install github:...` produces a built dist/ instead of a package with no entry point.",
+		"prepare": "npm run build",
 		"build": "tsc && node scripts/bundle-css.mjs && node scripts/bundle-browser.mjs",
 		"dev": "tsc --watch",
 		"test": "vitest --run",

@@ -1,0 +1,68 @@
+name: Bug report
+description: Something compiles wrong, renders wrong, or crashes
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing. The most useful bug report contains the MD2 source that
+        misbehaves — that's usually enough to reproduce in seconds.
+
+  - type: textarea
+    id: source
+    attributes:
+      label: MD2 source
+      description: The smallest document that shows the problem.
+      render: markdown
+      placeholder: |
+        ::::steps
+
+        :::step[First]
+        Body.
+        :::
+
+        ::::
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected, and what happened instead
+      placeholder: |
+        Expected a two-step list. Got a literal ":::" paragraph after the first step.
+    validations:
+      required: true
+
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics
+      description: >
+        Output of `compileMd2WithDiagnostics(source)`, if you have it. Many problems
+        are already reported there with a code like `MD2_ORPHAN_FENCE`.
+      render: json
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: markus-md2 version, or the CDN tag you loaded.
+      placeholder: 0.1.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Where it runs
+      multiple: true
+      options:
+        - Node
+        - Browser (bundled)
+        - Browser (CDN bundle)
+        - Unsure
+    validations:
+      required: true

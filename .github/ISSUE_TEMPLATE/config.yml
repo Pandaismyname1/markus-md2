@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Syntax reference
+    url: https://github.com/Pandaismyname1/markus-md2#directives
+    about: Every directive with examples, including the fence-length rule that trips most people up.
+  - name: Security report
+    url: https://github.com/Pandaismyname1/markus-md2/security/advisories/new
+    about: Report a vulnerability privately instead of opening a public issue.

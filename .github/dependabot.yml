@@ -1,0 +1,25 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # The unified/remark/rehype packages move together; separate PRs for each
+      # would be noise, and they're only ever tested as a set.
+      unified:
+        patterns:
+          - unified
+          - remark-*
+          - rehype-*
+          - mdast-*
+          - hast-*
+          - unist-*
+      dev:
+        dependency-type: development
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

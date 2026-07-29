@@ -142,3 +142,39 @@ describe('annotate-code directive', () => {
 		expect(html).not.toContain('md2-code-ann-row');
 	});
 });
+
+describe('annotate-code range bounds', () => {
+	it('clamps an absurd end line instead of allocating per line in the range', async () => {
+		const src = [
+			':::annotate-code{lang=ts}',
+			'```ts',
+			'const a = 1;',
+			'```',
+			'',
+			'@1-1000000000 info: this range is far larger than the code',
+			':::'
+		].join('\n');
+		const started = Date.now();
+		const html = await compileMd2(src);
+		expect(Date.now() - started).toBeLessThan(2000);
+		expect(html).toContain('md2-annotate-code');
+		// One code row, so at most one tinted row — not a million.
+		expect((html.match(/md2-code-row-info/g) || []).length).toBeLessThanOrEqual(2);
+	});
+
+	it('still tints a range that fits inside the code', async () => {
+		const src = [
+			':::annotate-code{lang=ts}',
+			'```ts',
+			'const a = 1;',
+			'const b = 2;',
+			'const c = 3;',
+			'```',
+			'',
+			'@1-2 warning: covers the first two lines',
+			':::'
+		].join('\n');
+		const html = await compileMd2(src);
+		expect((html.match(/md2-code-row-warning/g) || []).length).toBe(2);
+	});
+});
