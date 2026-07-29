@@ -6,6 +6,8 @@ Emitted `.md2-*` class names are part of the public API — they won't change ou
 
 ## [Unreleased]
 
+## [0.1.1] — 2026-07-29
+
 ### Fixed
 
 - **Resource exhaustion in `annotate-code`.** An annotation range (`@1-1000000000`) was iterated without clamping to the length of the code block, allocating one map entry per line in the range. Roughly 70 bytes of input could exhaust the heap and take the process down — uncatchably, since it's an allocation failure rather than a thrown error. Ranges are now clamped to the code that exists.
@@ -31,5 +33,6 @@ First public release. Extracted from the Markus app with no behaviour changes; a
 - **Flattened stylesheets** — `dist/md2.bundle.css` and `dist/md2.standalone.css` for `<link>` tags, inline `<style>` blocks, and sandboxes that block extra requests.
 - **Browser bundle** — `browser/md2.js`, a self-contained ESM build with every dependency inlined, committed so a CDN can serve it straight from git.
 
-[Unreleased]: https://github.com/Pandaismyname1/markus-md2/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/Pandaismyname1/markus-md2/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/Pandaismyname1/markus-md2/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/Pandaismyname1/markus-md2/releases/tag/v0.1.0

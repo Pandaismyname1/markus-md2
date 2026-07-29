@@ -30,7 +30,7 @@ That renders as a red-railed callout and a numbered sequence with the current st
 
 **Why bother.** An AI assistant producing a long answer has two options today: dump Markdown, where the blocking issue and the throwaway aside look identical, or emit HTML, which costs five times the tokens and is rigid. MD2 is the third: the model already speaks Markdown, `:::callout` is cheap to learn, and the render carries the structure the prose was trying to convey.
 
-> **Status.** `v0.1.0` is tagged and the browser bundle is live on the CDN. The npm release publishes from the tag once the registry token is configured — until then, use the CDN or install from git.
+> **Status.** `v0.1.0` is tagged and its browser bundle is live on the CDN; `0.1.1` is prepared and carries three security fixes, so pin `@v0.1.1` in the snippets below once that tag exists. The npm release publishes from the tag when the registry token is configured — until then, use the CDN or install from git.
 
 ## Install
 
