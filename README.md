@@ -30,16 +30,16 @@ That renders as a red-railed callout and a numbered sequence with the current st
 
 **Why bother.** An AI assistant producing a long answer has two options today: dump Markdown, where the blocking issue and the throwaway aside look identical, or emit HTML, which costs five times the tokens and is rigid. MD2 is the third: the model already speaks Markdown, `:::callout` is cheap to learn, and the render carries the structure the prose was trying to convey.
 
-> **Status.** `v0.1.0` is tagged and its browser bundle is live on the CDN; `0.1.1` is prepared and carries three security fixes, so pin `@v0.1.1` in the snippets below once that tag exists. The npm release publishes from the tag when the registry token is configured — until then, use the CDN or install from git.
-
 ## Install
+
+MD2 is distributed from GitHub rather than the npm registry: a tag is the artifact, served by jsDelivr for browsers and installable straight from git for Node. Nothing to sign up for, and what you pin is what you can read.
 
 **From a CDN, no install.** `browser/md2.js` is a self-contained ESM bundle with every dependency inlined, committed to the repository so a CDN can serve it straight from git. Pin a tag — never `@main` — so a page renders the same way a year from now:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Pandaismyname1/markus-md2@v0.1.0/browser/md2.standalone.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Pandaismyname1/markus-md2@v0.1.1/browser/md2.standalone.css" />
 <script type="module">
-	import { compileMd2 } from 'https://cdn.jsdelivr.net/gh/Pandaismyname1/markus-md2@v0.1.0/browser/md2.js';
+	import { compileMd2 } from 'https://cdn.jsdelivr.net/gh/Pandaismyname1/markus-md2@v0.1.1/browser/md2.js';
 
 	document.querySelector('.md2').innerHTML = await compileMd2(source);
 </script>
@@ -47,19 +47,15 @@ That renders as a red-railed callout and a numbered sequence with the current st
 
 Two URLs, no build step, no package manager. Use `md2.standalone.css` when the host page has no design system of its own, or `md2.css` when you supply the tokens.
 
-**From npm**, once the first release publishes:
+**For Node**, install the tag directly:
 
 ```bash
-npm install markus-md2
+npm install github:Pandaismyname1/markus-md2#v0.1.1
 ```
 
-**From git**, which works today:
+That builds during install — `dist/` isn't committed — so it takes a few seconds and needs a working toolchain. Pin a tag rather than a branch; upgrading is then a one-word edit.
 
-```bash
-npm install github:Pandaismyname1/markus-md2#v0.1.0
-```
-
-A git install builds the package on install — `dist/` isn't committed — so it needs a few seconds and a working toolchain. The published tarball ships prebuilt.
+Every release also attaches the browser bundle and the flattened stylesheets, if you'd rather vendor a file than trust a CDN.
 
 ESM only, Node 18+. The same compiler runs on a server and in a browser.
 

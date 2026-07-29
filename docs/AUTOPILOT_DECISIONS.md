@@ -12,6 +12,14 @@ Consequence: the copy still sitting in the private repo at `skills/md2-mode/` is
 
 Three compiler findings (nested stray fences, `flow{id}`, chart ticks) are recorded in `docs/KNOWN_ISSUES.md` with reproductions instead of being fixed. The contract for this run was repository preparation; mixing behaviour changes into a docs-and-setup PR makes both harder to review, and the fixes deserve their own tests.
 
+## 0. No npm registry at all (owner's call, recorded here)
+
+Distribution is GitHub tags plus jsDelivr. The registry's publishing flow — 2FA that a passkey can't satisfy from the CLI, token types that differ in ways the error messages don't explain — cost more time in this project than the packaging itself, for a package whose primary consumers are a browser CDN and a Claude Code skill.
+
+What it costs: no `npm install markus-md2`, no npmjs.com listing, and `esm.sh`/`unpkg` paths don't resolve. What it keeps: `npm install github:…#v0.1.1` still works for Node, jsDelivr still serves the browser bundle, and the release workflow no longer holds a registry token — which removes the supply-chain reason the actions had to be SHA-pinned in the first place.
+
+Reversible at any time: drop `"private": true`, add the publish step back, and the name is still unclaimed.
+
 ## 3. No npm badge, and a status line instead
 
 **Worth a second look.** The package isn't published yet, so an npm version badge would render as "invalid" — worse than no badge on a first visit. The README carries a blockquoted status line saying the tag is live, the CDN works, and npm publishes once the token is configured.

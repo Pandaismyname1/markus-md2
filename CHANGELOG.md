@@ -8,6 +8,10 @@ Emitted `.md2-*` class names are part of the public API — they won't change ou
 
 ## [0.1.1] — 2026-07-29
 
+### Changed
+
+- **Distribution is GitHub-only.** Releases are git tags, served to browsers by jsDelivr and installed for Node with `npm install github:Pandaismyname1/markus-md2#<tag>`. The package is not published to the npm registry, and `package.json` is marked private so it can't be by accident. Each release attaches the browser bundle and the flattened stylesheets for anyone who prefers to vendor a file.
+
 ### Fixed
 
 - **Resource exhaustion in `annotate-code`.** An annotation range (`@1-1000000000`) was iterated without clamping to the length of the code block, allocating one map entry per line in the range. Roughly 70 bytes of input could exhaust the heap and take the process down — uncatchably, since it's an allocation failure rather than a thrown error. Ranges are now clamped to the code that exists.
