@@ -6,21 +6,49 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        # package.json promises >=18, so test what it promises.
+        node: [18, 20, 22]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: 20
+          node-version: ${{ matrix.node }}
           cache: npm
+
       # `npm install`, not `npm ci`: npm resolves optional platform packages
       # differently per OS, so a lock file generated on Windows is missing
       # entries Linux needs (@emnapi/*, via rolldown's wasm binding) and `npm ci`
       # refuses to proceed. The lock stays committed for local reproducibility;
-      # CI resolving fresh also surfaces upstream breakage early, which is what
-      # you want from a library's CI.
+      # CI resolving fresh also surfaces upstream breakage early.
       - run: npm install --no-audit --no-fund
       - run: npm test
       - run: npm run build
+
+      # browser/ is committed because jsDelivr serves it straight from git —
+      # a stale bundle is served to real pages the moment it lands on main.
+      # Every bundled dependency (unified, remark-*, prismjs…) is exactly what
+      # Dependabot bumps, so without this check those PRs go green while the
+      # bundle rots, and the problem only surfaces at release time.
+      - name: Verify the committed bundle matches a fresh build
+        if: matrix.node == 20
+        run: |
+          if [ -n "$(git status --porcelain browser/)" ]; then
+            echo "browser/ differs from a fresh build. Run 'npm run build' and commit the result."
+            git --no-pager diff --stat browser/
+            git status --porcelain browser/
+            exit 1
+          fi

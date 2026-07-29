@@ -7,7 +7,10 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 indent_style = tab
 
-[*.{md,yml,yaml,json}]
+# JSON is deliberately absent: package.json, package-lock.json and tsconfig.json
+# are tab-indented, and an editor reformatting them on save would produce
+# whole-file diffs — including on the version field the release workflow reads.
+[*.{md,yml,yaml}]
 indent_style = space
 indent_size = 2
 

@@ -87,3 +87,24 @@ function stringifyLabelChildren(children: MutableNode[]): string {
 	}
 	return parts.join('');
 }
+
+/** Accept a CSS length-ish value for interpolation into a `style` attribute.
+ *
+ * Directive attributes are author-supplied text, and these particular ones are
+ * concatenated into a style string. A value containing `;` would end the
+ * declaration and start arbitrary ones — `position: fixed` overlays, `url()`
+ * requests — without any HTML tag or `javascript:` URL being involved.
+ *
+ * The accepted shape is deliberately narrow: a number with an optional unit, a
+ * `calc()`/`min()`/`max()`/`clamp()` expression, or a CSS variable reference.
+ * Anything else returns the fallback, because nothing legitimate needs more. */
+export function coerceCssLength(value: string | undefined, fallback: string): string {
+	if (!value) return fallback;
+	const v = value.trim();
+	if (v.length > 64) return fallback;
+	if (/[;{}<>\\"']/.test(v)) return fallback;
+	const simple = /^-?\d*\.?\d+(px|rem|em|%|vw|vh|vmin|vmax|ch|ex|pt|pc|cm|mm|in|fr)?$/;
+	const fn = /^(calc|min|max|clamp)\([\w\s.,%+*/()-]+\)$/;
+	const cssVar = /^var\(--[\w-]+(,\s*[\w.%\s-]+)?\)$/;
+	return simple.test(v) || fn.test(v) || cssVar.test(v) ? v : fallback;
+}

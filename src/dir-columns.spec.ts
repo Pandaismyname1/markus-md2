@@ -39,3 +39,25 @@ describe('columns / column directives', () => {
 		expect(html).toContain('second');
 	});
 });
+
+describe('columns css value handling', () => {
+	it('drops a min value that would escape the style declaration', async () => {
+		const attack = ':::columns{min="1px;position:fixed;inset:0;background:url(https://evil.example/x)"}\nA\n:::';
+		const html = await compileMd2(attack);
+		expect(html).not.toContain('position:fixed');
+		expect(html).not.toContain('evil.example');
+		expect(html).toContain('--md2-cols-min: 220px');
+	});
+
+	it('drops a gap value carrying extra declarations', async () => {
+		const html = await compileMd2(':::columns{gap="1rem;z-index:9999"}\nA\n:::');
+		expect(html).not.toContain('z-index');
+		expect(html).toContain('--md2-cols-gap: 1rem');
+	});
+
+	it('keeps legitimate lengths, calc() and var() values', async () => {
+		const html = await compileMd2('::::columns{min=18rem gap="clamp(0.5rem, 2vw, 2rem)"}\n:::column\nA\n:::\n::::');
+		expect(html).toContain('--md2-cols-min: 18rem');
+		expect(html).toContain('--md2-cols-gap: clamp(0.5rem, 2vw, 2rem)');
+	});
+});

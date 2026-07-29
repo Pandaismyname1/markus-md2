@@ -11,10 +11,13 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
+      # SHA-pinned: this job holds NPM_TOKEN, and a mutable tag on a third-party
+      # action is a path to exfiltrating it. Dependabot's github-actions
+      # ecosystem keeps these current.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 20
           cache: npm
@@ -25,10 +28,7 @@ jobs:
       - run: npm test
       - run: npm run build
 
-      # The build regenerates browser/ and the flattened stylesheets, which are
-      # committed. If they differ from what's tagged, the tag doesn't match its
-      # own source and the CDN would serve something nobody reviewed.
-      - name: Verify committed build artifacts match the source
+      - name: Verify the committed bundle matches a fresh build
         run: |
           if [ -n "$(git status --porcelain browser/)" ]; then
             echo "browser/ differs from a fresh build of this tag:"
@@ -45,12 +45,26 @@ jobs:
             exit 1
           fi
 
-      - name: Publish to npm
-        run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
+      # Both steps below are idempotent. A re-run after a partial failure used to
+      # die on EPUBLISHCONFLICT before reaching the release step, leaving a
+      # published version with no GitHub release and no way to finish the job.
       - name: Create the GitHub release
-        run: gh release create "$GITHUB_REF_NAME" --generate-notes --verify-tag
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            echo "Release $GITHUB_REF_NAME already exists, leaving it alone."
+          else
+            gh release create "$GITHUB_REF_NAME" --generate-notes --verify-tag
+          fi
         env:
           GH_TOKEN: ${{ github.token }}
+
+      - name: Publish to npm
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          if npm view "markus-md2@$VERSION" version >/dev/null 2>&1; then
+            echo "markus-md2@$VERSION is already on the registry, nothing to publish."
+          else
+            npm publish --provenance --access public
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

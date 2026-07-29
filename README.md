@@ -26,7 +26,7 @@ About 40 s, no lock on `orders`.
 ::::
 ```
 
-That renders as a red-railed callout and a numbered sequence with the current step highlighted — in a browser, in an email, or inline in a chat window.
+That renders as a red-railed callout and a numbered sequence with the current step highlighted — in a browser, in a docs site, or inline in a chat window.
 
 **Why bother.** An AI assistant producing a long answer has two options today: dump Markdown, where the blocking issue and the throwaway aside look identical, or emit HTML, which costs five times the tokens and is rigid. MD2 is the third: the model already speaks Markdown, `:::callout` is cheap to learn, and the render carries the structure the prose was trying to convey.
 
@@ -47,17 +47,19 @@ That renders as a red-railed callout and a numbered sequence with the current st
 
 Two URLs, no build step, no package manager. Use `md2.standalone.css` when the host page has no design system of its own, or `md2.css` when you supply the tokens.
 
-**From npm.**
+**From npm**, once the first release publishes:
 
 ```bash
 npm install markus-md2
 ```
 
-**From git**, before the npm release:
+**From git**, which works today:
 
 ```bash
 npm install github:Pandaismyname1/markus-md2#v0.1.0
 ```
+
+A git install builds the package on install — `dist/` isn't committed — so it needs a few seconds and a working toolchain. The published tarball ships prebuilt.
 
 ESM only, Node 18+. The same compiler runs on a server and in a browser.
 
@@ -95,7 +97,7 @@ Codes: `MD2_UNKNOWN_DIRECTIVE`, `MD2_BAD_SEVERITY`, `MD2_FIGURE_MISSING_SRC`, `M
 | `risk-map`           | container | Index of files or sections with severity badges       |
 | `tabs` / `tab`       | container | CSS-only tabs (radio inputs, no JavaScript)           |
 | `steps` / `step`     | container | Numbered sequence with current/pending states         |
-| `figure`             | leaf      | Image with caption and credit                         |
+| `figure`             | container | Image with caption and credit                         |
 | `timeline` / `event` | container | Time-stamped incident or history log                  |
 | `compare` / `option` | container | Side-by-side options, doubles as a vote picker        |
 | `tree`               | container | File tree from a nested list                          |
@@ -125,13 +127,15 @@ Three colons inside, four outside — and five if that block is itself nested. T
 
 ## Styling
 
-Plain CSS, no build step:
+Plain CSS — no preprocessor, no config:
 
 ```js
-import 'markus-md2/md2.css';
+import 'markus-md2/md2.css'; // your bundler resolves its four @imports
 ```
 
-Every directive reads its colours from fifteen `--md2-*` custom properties, which by default alias [daisyUI](https://daisyui.com) semantic variables. Three ways to theme:
+Without a bundler, `<link>` one of the flattened files described below.
+
+Directives take their colours from fifteen `--md2-*` custom properties, which by default alias [daisyUI](https://daisyui.com) semantic variables. (Annotated code additionally uses four `--md2-code-*` values that are hardcoded dark, on the theory that a code block reads best against its own background — [see the known issue](docs/KNOWN_ISSUES.md) if you'd rather they followed your theme.) Three ways to theme:
 
 **You use daisyUI.** Nothing to do — flipping `data-theme` re-themes every directive.
 
@@ -142,7 +146,7 @@ import 'markus-md2/md2.css';
 import 'markus-md2/md2-host.css';
 ```
 
-**You have your own design system.** Map the tokens onto it — this is the entire integration:
+**You have your own design system.** Map the tokens onto it — fifteen declarations and you're done:
 
 ```css
 .md2 {
@@ -150,11 +154,11 @@ import 'markus-md2/md2-host.css';
 	--md2-blocking: var(--your-danger);
 	--md2-bg: var(--your-surface);
 	--md2-text: var(--your-text);
-	/* …fifteen in total, listed in css/md2-host.css */
+	/* …fifteen in total; all of them are named in the header comment of css/md2-host.css */
 }
 ```
 
-For `<link>` tags, inline `<style>` blocks, and sandboxes that block extra requests, the build emits flattened single files: `dist/md2.bundle.css` and `dist/md2.standalone.css` (the bundle plus host tokens, works in a page with no design system at all). Alternate themes — sepia, newspaper, high-contrast, solarized — apply via `data-md2-theme` on the article wrapper.
+For `<link>` tags, inline `<style>` blocks, and sandboxes that block extra requests, the build emits flattened single files, importable as `markus-md2/md2.bundle.css` and `markus-md2/md2.standalone.css` (the bundle plus host tokens — works in a page with no design system at all). Alternate themes — sepia, newspaper, high-contrast, solarized — apply via `data-md2-theme` on the article wrapper.
 
 ## Use it in Claude Code: the `md2-mode` skill
 
@@ -162,20 +166,20 @@ This is the part that changes your day.
 
 Claude Code answers in Markdown, in a chat pane. A code review comes back as grey-on-grey text where the blocking bug and the style nit look identical, and you scroll hunting for the part that matters. `md2-mode` is a [skill](https://docs.claude.com/en/docs/claude-code/skills) that makes Claude deliver substantive answers as a **rendered MD2 document inline in the conversation** — severity you can see, steps you can follow, annotated code with findings pinned to their lines.
 
-It compiles in the sandbox from the CDN bundle above, so the answer costs about what the Markdown would have. Turn it on once and it stays on.
+It loads the compiler and `browser/md2.css` from the pinned CDN tag and compiles inside the sandbox, so the answer costs about what the Markdown would have. Turn it on once and it stays on.
 
 ### Install
 
 **macOS / Linux**
 
 ```bash
-git clone https://github.com/Pandaismyname1/markus-md2.git /tmp/markus-md2 && mkdir -p ~/.claude/skills && cp -r /tmp/markus-md2/skills/md2-mode ~/.claude/skills/
+git clone --depth 1 https://github.com/Pandaismyname1/markus-md2.git /tmp/markus-md2 && mkdir -p ~/.claude/skills && cp -r /tmp/markus-md2/skills/md2-mode ~/.claude/skills/
 ```
 
 **Windows (PowerShell)**
 
 ```powershell
-git clone https://github.com/Pandaismyname1/markus-md2.git $env:TEMP\markus-md2; New-Item -ItemType Directory -Force $env:USERPROFILE\.claude\skills; Copy-Item -Recurse -Force $env:TEMP\markus-md2\skills\md2-mode $env:USERPROFILE\.claude\skills\
+git clone --depth 1 https://github.com/Pandaismyname1/markus-md2.git $env:TEMP\markus-md2; New-Item -ItemType Directory -Force $env:USERPROFILE\.claude\skills; Copy-Item -Recurse -Force $env:TEMP\markus-md2\skills\md2-mode $env:USERPROFILE\.claude\skills\
 ```
 
 Then restart Claude Code, or run `/reload-skills` if your client has it. Drop the skill into a project's `.claude/skills/` instead of `~/.claude/skills/` to scope it to one repo.
@@ -211,7 +215,7 @@ const { source, diagnostics } = upgradeMarkdown('> **Note:** heads up');
 // ':::callout{severity=info}\nheads up\n:::'
 ```
 
-Useful when a document arrives from a tool that doesn't know MD2 — the render still gets structure.
+Useful when a document arrives from a tool that doesn't know MD2 — the render still gets structure. The diagnostics it returns report what it rewrote, using its own `MD2_UPGRADE_APPLIED` code rather than the compiler codes listed above.
 
 ## Markup contract
 
@@ -221,7 +225,7 @@ The compiler emits semantic HTML with stable `.md2-*` class names. Those names a
 
 ```bash
 npm install
-npm test          # 142 specs
+npm test          # 148 specs
 npm run build     # tsc + flattened stylesheets + browser bundle
 ```
 

@@ -6,18 +6,20 @@ Thanks for looking. MD2 is small on purpose, and the fastest way to get a change
 
 ```bash
 npm install
-npm test        # 142 specs, ~1.5s
+npm test        # 148 specs, ~1s
 npm run build   # tsc + flattened stylesheets + browser bundle
 ```
 
-Node 18+. No database, no services, no environment variables — the compiler is a pure function from source text to HTML.
+Node 18+. No database, no services, no environment variables.
+
+The compiler is *almost* a pure function from source text to HTML. One exception is worth knowing before it surprises you: `src/dir-tabs.ts` holds a module-level counter used to generate ids for `:::tabs` blocks that don't declare one, so identical input compiles to different ids on successive calls. That breaks SSR/hydration pairing and output hashing — see [known issues](docs/KNOWN_ISSUES.md). Pass an explicit `id=` to avoid it.
 
 ## How the pipeline fits together
 
 `unified` → `remark-parse` → `remark-directive` → `md2DirectiveTransform` → `remark-rehype` → `rehype-raw` → `rehype-stringify`.
 
 - `src/compile.ts` — the three public entry points, each bracketing the run with a diagnostics collector.
-- `src/remark-md2.ts` — walks the tree and dispatches each directive. Small directives are handled inline here; the bigger ones live in `src/dir-*.ts`, one per directive.
+- `src/remark-md2.ts` — walks the tree and dispatches each directive. Most directives are handled inline here, including `annotate-code`, which is the largest single transform despite having its specs in `src/dir-annotate-code.spec.ts`; the ones with substantial layout logic live in `src/dir-*.ts`.
 - `src/md2-utils.ts` — `coerceSeverity()` and `extractLabel()`. Use them rather than reading `node.children[0].value` directly; `extractLabel` handles labels containing colons, which the naive version drops.
 - `src/diagnostics.ts` — the per-invocation collector plus the Levenshtein "did you mean" hint.
 
