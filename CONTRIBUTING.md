@@ -47,4 +47,8 @@ New directives need coverage of the happy path, the diagnostic path (what happen
 
 Work on a branch, describe what a reader sees differently, and include the MD2 source plus a screenshot for anything visual. Run `npm test` and `npm run build` before opening the PR — CI runs both on Linux, and the build regenerates `browser/` and the flattened stylesheets, which are committed.
 
-If you regenerate `package-lock.json` on Windows, check that `@emnapi/*` entries survive. npm's optional-dependency resolution is platform-dependent and dropping them breaks `npm ci` on Linux CI.
+### About the lock file
+
+CI runs `npm install`, not `npm ci`. npm resolves optional platform packages differently per operating system, so a `package-lock.json` generated on Windows describes a tree Linux can't satisfy — `@emnapi/*` lands nested under rolldown's wasm binding at one version, while Linux wants another hoisted — and `npm ci` refuses to install rather than adapting.
+
+The lock stays committed because it's still useful locally. Just don't expect `npm ci` to work across platforms, and don't be alarmed when a lock regenerated on your machine shows a large diff.

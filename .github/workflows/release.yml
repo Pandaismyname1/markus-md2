@@ -20,7 +20,8 @@ jobs:
           cache: npm
           registry-url: https://registry.npmjs.org
 
-      - run: npm ci
+      # See the note in ci.yml — a Windows-generated lock breaks `npm ci` on Linux.
+      - run: npm install --no-audit --no-fund
       - run: npm test
       - run: npm run build
 

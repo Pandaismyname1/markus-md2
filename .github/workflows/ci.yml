@@ -15,6 +15,12 @@ jobs:
         with:
           node-version: 20
           cache: npm
-      - run: npm ci
+      # `npm install`, not `npm ci`: npm resolves optional platform packages
+      # differently per OS, so a lock file generated on Windows is missing
+      # entries Linux needs (@emnapi/*, via rolldown's wasm binding) and `npm ci`
+      # refuses to proceed. The lock stays committed for local reproducibility;
+      # CI resolving fresh also surfaces upstream breakage early, which is what
+      # you want from a library's CI.
+      - run: npm install --no-audit --no-fund
       - run: npm test
       - run: npm run build
