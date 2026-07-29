@@ -1,0 +1,1487 @@
+/* MD2 directive styles. Plain CSS so any consumer can drop in.
+ *
+ * Tokens (`--md2-*`) are derived from daisyUI v5 semantic variables
+ * (`--color-base-100`, `--color-base-content`, `--color-info`, ...). That
+ * means flipping `data-theme` on the document root re-themes every MD2
+ * directive automatically. If daisyUI isn't wired up, the
+ * `@supports not (color: oklch(0 0 0))` fallback at the bottom keeps the
+ * old hex values working. */
+
+/* MD2 tier-1 directive styles: tabs, steps, figure.
+ * Tokens come from `.md2` in md2.css (which derives them from daisyUI). */
+
+/* ============================================================
+ * Tabs — pure-CSS radio-driven switcher.
+ * ============================================================ */
+
+.md2-tabs {
+	margin: 1rem 0;
+	border: 1px solid var(--md2-border);
+	border-radius: var(--md2-radius);
+	background: var(--md2-bg);
+	overflow: hidden;
+}
+
+/* Hide the radio inputs but keep them focusable. */
+.md2-tabs-input {
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+	width: 0;
+	height: 0;
+}
+
+.md2-tabs-bar {
+	display: flex;
+	flex-wrap: wrap;
+	border-bottom: 1px solid var(--md2-border);
+	background: var(--md2-bg-soft);
+}
+
+.md2-tabs-label {
+	flex: 0 0 auto;
+	padding: 0.55rem 1rem;
+	margin: 0;
+	cursor: pointer;
+	font-size: 0.85rem;
+	font-weight: 600;
+	color: var(--md2-muted);
+	border-bottom: 2px solid transparent;
+	user-select: none;
+	transition:
+		color 0.15s,
+		border-color 0.15s,
+		background 0.15s;
+}
+.md2-tabs-label:hover {
+	color: var(--md2-text);
+	background: color-mix(in oklab, var(--md2-info) 5%, transparent);
+}
+.md2-tabs-input:focus-visible + .md2-tabs-bar > .md2-tabs-label,
+.md2-tabs-label:focus-visible {
+	outline: 2px solid var(--md2-info);
+	outline-offset: -2px;
+}
+
+.md2-tabs-panel {
+	display: none;
+	padding: 0.85rem 1rem;
+}
+
+/* Pure-CSS switch: an `:nth-of-type(N):checked` input picks the matching
+ * label + panel. DOM order in dir-tabs.ts: all inputs, then bar
+ * (labels), then panels — so we walk siblings forward from each input. */
+.md2-tabs-input:nth-of-type(1):checked ~ .md2-tabs-panels > .md2-tabs-panel:nth-of-type(1),
+.md2-tabs-input:nth-of-type(2):checked ~ .md2-tabs-panels > .md2-tabs-panel:nth-of-type(2),
+.md2-tabs-input:nth-of-type(3):checked ~ .md2-tabs-panels > .md2-tabs-panel:nth-of-type(3),
+.md2-tabs-input:nth-of-type(4):checked ~ .md2-tabs-panels > .md2-tabs-panel:nth-of-type(4),
+.md2-tabs-input:nth-of-type(5):checked ~ .md2-tabs-panels > .md2-tabs-panel:nth-of-type(5),
+.md2-tabs-input:nth-of-type(6):checked ~ .md2-tabs-panels > .md2-tabs-panel:nth-of-type(6),
+.md2-tabs-input:nth-of-type(7):checked ~ .md2-tabs-panels > .md2-tabs-panel:nth-of-type(7),
+.md2-tabs-input:nth-of-type(8):checked ~ .md2-tabs-panels > .md2-tabs-panel:nth-of-type(8) {
+	display: block;
+}
+
+.md2-tabs-input:nth-of-type(1):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(1),
+.md2-tabs-input:nth-of-type(2):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(2),
+.md2-tabs-input:nth-of-type(3):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(3),
+.md2-tabs-input:nth-of-type(4):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(4),
+.md2-tabs-input:nth-of-type(5):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(5),
+.md2-tabs-input:nth-of-type(6):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(6),
+.md2-tabs-input:nth-of-type(7):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(7),
+.md2-tabs-input:nth-of-type(8):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(8) {
+	color: var(--md2-info);
+	border-bottom-color: var(--md2-info);
+	background: var(--md2-bg);
+}
+
+@media (max-width: 480px) {
+	.md2-tabs-bar {
+		flex-direction: column;
+	}
+	.md2-tabs-label {
+		border-bottom: 1px solid var(--md2-border);
+		border-left: 2px solid transparent;
+	}
+	.md2-tabs-input:checked ~ .md2-tabs-bar > .md2-tabs-label {
+		border-bottom-color: var(--md2-border);
+	}
+	.md2-tabs-input:nth-of-type(1):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(1),
+	.md2-tabs-input:nth-of-type(2):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(2),
+	.md2-tabs-input:nth-of-type(3):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(3),
+	.md2-tabs-input:nth-of-type(4):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(4),
+	.md2-tabs-input:nth-of-type(5):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(5),
+	.md2-tabs-input:nth-of-type(6):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(6),
+	.md2-tabs-input:nth-of-type(7):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(7),
+	.md2-tabs-input:nth-of-type(8):checked ~ .md2-tabs-bar > .md2-tabs-label:nth-of-type(8) {
+		border-left-color: var(--md2-info);
+	}
+}
+
+/* ============================================================
+ * Steps — vertical list with markers + connector line.
+ * ============================================================ */
+
+.md2-steps {
+	list-style: none;
+	counter-reset: md2-step var(--md2-steps-start, 0);
+	padding: 0;
+	margin: 1rem 0;
+}
+.md2-steps[start='1'] {
+	--md2-steps-start: 0;
+}
+.md2-steps[start='2'] {
+	--md2-steps-start: 1;
+}
+.md2-steps[start='3'] {
+	--md2-steps-start: 2;
+}
+.md2-steps[start='4'] {
+	--md2-steps-start: 3;
+}
+.md2-steps[start='5'] {
+	--md2-steps-start: 4;
+}
+
+.md2-step {
+	position: relative;
+	display: grid;
+	grid-template-columns: 2.25rem 1fr;
+	gap: 0.85rem;
+	padding: 0.25rem 0 1.1rem;
+	counter-increment: md2-step;
+}
+.md2-step::before {
+	content: '';
+	position: absolute;
+	left: calc(2.25rem / 2 - 1px);
+	top: 2.25rem;
+	bottom: 0;
+	width: 2px;
+	background: var(--md2-border);
+}
+.md2-step:last-child::before {
+	display: none;
+}
+
+.md2-step-marker {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.25rem;
+	height: 2.25rem;
+	border-radius: 999px;
+	background: var(--md2-bg);
+	border: 2px solid var(--md2-border);
+	color: var(--md2-muted);
+	font-weight: 700;
+	font-size: 0.85rem;
+	font-variant-numeric: tabular-nums;
+	z-index: 1;
+}
+.md2-step-marker::before {
+	content: counter(md2-step);
+}
+
+.md2-step-current > .md2-step-marker {
+	border-color: var(--md2-info);
+	color: var(--md2-info);
+	background: var(--md2-info-bg);
+	box-shadow: 0 0 0 4px color-mix(in oklab, var(--md2-info) 12%, transparent);
+}
+.md2-step-done > .md2-step-marker {
+	border-color: var(--md2-success);
+	background: var(--md2-success);
+	color: var(--color-success-content, #fff);
+}
+.md2-step-done > .md2-step-marker::before {
+	content: '✓';
+}
+.md2-step-pending > .md2-step-marker {
+	opacity: 0.6;
+}
+
+.md2-step-content {
+	min-width: 0;
+	padding-top: 0.15rem;
+}
+.md2-step-header {
+	font-weight: 600;
+	font-size: 1rem;
+	margin: 0 0 0.25rem;
+	color: var(--md2-text);
+}
+.md2-step-current > .md2-step-content > .md2-step-header {
+	color: var(--md2-info);
+}
+.md2-step-body > :first-child {
+	margin-top: 0;
+}
+.md2-step-body > :last-child {
+	margin-bottom: 0;
+}
+
+.md2-step-sev-blocking > .md2-step-marker {
+	border-color: var(--md2-blocking);
+	color: var(--md2-blocking);
+}
+.md2-step-sev-warning > .md2-step-marker {
+	border-color: var(--md2-warning);
+	color: var(--md2-warning);
+}
+.md2-step-sev-success > .md2-step-marker {
+	border-color: var(--md2-success);
+	color: var(--md2-success);
+}
+.md2-step-sev-nit > .md2-step-marker {
+	border-color: var(--md2-nit);
+	color: var(--md2-nit);
+}
+
+/* ============================================================
+ * Figure
+ * ============================================================ */
+
+.md2-figure {
+	margin: 1.2rem 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5rem;
+}
+.md2-figure-img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	border-radius: var(--md2-radius);
+	border: 1px solid var(--md2-border);
+	background: var(--md2-bg-soft);
+}
+.md2-figure-link {
+	display: inline-block;
+	max-width: 100%;
+	line-height: 0;
+	text-decoration: none;
+	border-bottom: 0;
+}
+.md2-figure-caption {
+	text-align: center;
+	font-size: 0.85rem;
+	color: var(--md2-muted);
+	line-height: 1.5;
+	max-width: 60ch;
+}
+.md2-figure-caption > p {
+	margin: 0;
+}
+.md2-figure-credit {
+	display: block;
+	font-style: italic;
+	font-size: 0.78rem;
+	color: var(--md2-muted);
+	margin-top: 0.2rem;
+}
+.md2-figure-credit::before {
+	content: '— ';
+	opacity: 0.7;
+}
+
+/* MD2 tier-2 directive styles: timeline, compare, tree.
+ * Tokens come from `.md2` in md2.css (which derives them from daisyUI). */
+
+/* ============================================================
+ * Timeline
+ * ============================================================ */
+
+.md2-timeline {
+	list-style: none;
+	padding: 0;
+	margin: 1rem 0;
+	position: relative;
+}
+
+.md2-timeline-event {
+	position: relative;
+	display: grid;
+	grid-template-columns: 1.5rem 1fr;
+	column-gap: 0.85rem;
+	padding: 0.45rem 0;
+	margin: 0;
+}
+/* Vertical connector — column 1, from top of one event to top of next. */
+.md2-timeline-event::before {
+	content: '';
+	position: absolute;
+	left: calc(0.75rem - 1px);
+	top: 1.2rem;
+	bottom: -0.45rem;
+	width: 2px;
+	background: var(--md2-border);
+	pointer-events: none;
+}
+.md2-timeline-event:last-child::before {
+	display: none;
+}
+
+.md2-timeline-dot {
+	grid-column: 1;
+	grid-row: 1 / span 99;
+	display: inline-block;
+	width: 0.85rem;
+	height: 0.85rem;
+	border-radius: 999px;
+	background: var(--md2-bg);
+	border: 2px solid var(--md2-muted);
+	margin-top: 0.35rem;
+	box-shadow: 0 0 0 3px var(--md2-bg);
+	align-self: start;
+	justify-self: center;
+}
+.md2-timeline-dot-info {
+	border-color: var(--md2-info);
+	background: var(--md2-info-bg);
+}
+.md2-timeline-dot-warning {
+	border-color: var(--md2-warning);
+	background: var(--md2-warning-bg);
+}
+.md2-timeline-dot-blocking {
+	border-color: var(--md2-blocking);
+	background: var(--md2-blocking-bg);
+}
+.md2-timeline-dot-nit {
+	border-color: var(--md2-nit);
+	background: var(--md2-nit-bg);
+}
+.md2-timeline-dot-success {
+	border-color: var(--md2-success);
+	background: var(--md2-success-bg);
+}
+
+.md2-timeline-when {
+	grid-column: 2;
+	display: block;
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 0.78rem;
+	color: var(--md2-muted);
+	margin-bottom: 0.15rem;
+}
+.md2-timeline-event > :not(.md2-timeline-dot):not(.md2-timeline-when) {
+	grid-column: 2;
+	margin: 0.15rem 0;
+}
+.md2-timeline-event-blocking .md2-timeline-when {
+	color: var(--md2-blocking);
+}
+.md2-timeline-event-warning .md2-timeline-when {
+	color: var(--md2-warning);
+}
+.md2-timeline-event-success .md2-timeline-when {
+	color: var(--md2-success);
+}
+.md2-timeline-event-info .md2-timeline-when {
+	color: var(--md2-info);
+}
+
+/* ============================================================
+ * Compare / option (diff + vote modes)
+ * ============================================================ */
+
+.md2-compare {
+	margin: 1rem 0;
+	border: 1px solid var(--md2-border);
+	border-radius: var(--md2-radius);
+	background: var(--md2-bg-soft);
+	padding: 0.75rem 0.9rem 0.9rem;
+}
+.md2-compare-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 0.85rem;
+}
+.md2-compare-option {
+	display: flex;
+	flex-direction: column;
+	background: var(--md2-bg);
+	border: 1px solid var(--md2-border);
+	border-radius: var(--md2-radius);
+	padding: 0.7rem 0.85rem 0.85rem;
+	min-width: 0;
+}
+.md2-compare-option-info {
+	border-color: color-mix(in oklab, var(--md2-info) 40%, var(--md2-border));
+}
+.md2-compare-option-warning {
+	border-color: color-mix(in oklab, var(--md2-warning) 40%, var(--md2-border));
+}
+.md2-compare-option-blocking {
+	border-color: color-mix(in oklab, var(--md2-blocking) 40%, var(--md2-border));
+}
+.md2-compare-option-success {
+	border-color: color-mix(in oklab, var(--md2-success) 40%, var(--md2-border));
+}
+.md2-compare-option-nit {
+	border-color: color-mix(in oklab, var(--md2-nit) 40%, var(--md2-border));
+}
+
+.md2-compare-option-header {
+	display: flex;
+	align-items: center;
+	gap: 0.55rem;
+	margin: 0 0 0.45rem;
+}
+.md2-compare-option-key {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 700;
+	font-size: 0.85rem;
+	min-width: 1.5rem;
+	height: 1.5rem;
+	padding: 0 0.4rem;
+	border-radius: 6px;
+	background: var(--md2-info-bg);
+	color: var(--md2-info);
+	border: 1px solid color-mix(in oklab, var(--md2-info) 30%, transparent);
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.md2-compare-option-warning > .md2-compare-option-header > .md2-compare-option-key {
+	background: var(--md2-warning-bg);
+	color: var(--md2-warning);
+	border-color: color-mix(in oklab, var(--md2-warning) 30%, transparent);
+}
+.md2-compare-option-blocking > .md2-compare-option-header > .md2-compare-option-key {
+	background: var(--md2-blocking-bg);
+	color: var(--md2-blocking);
+	border-color: color-mix(in oklab, var(--md2-blocking) 30%, transparent);
+}
+.md2-compare-option-success > .md2-compare-option-header > .md2-compare-option-key {
+	background: var(--md2-success-bg);
+	color: var(--md2-success);
+	border-color: color-mix(in oklab, var(--md2-success) 30%, transparent);
+}
+.md2-compare-option-nit > .md2-compare-option-header > .md2-compare-option-key {
+	background: var(--md2-nit-bg);
+	color: var(--md2-nit);
+}
+
+.md2-compare-option-label {
+	font-weight: 700;
+	font-size: 0.95rem;
+	line-height: 1.3;
+	color: var(--md2-text);
+	flex: 1 1 auto;
+	min-width: 0;
+}
+.md2-compare-option > :not(.md2-compare-option-header) {
+	margin: 0.3rem 0;
+}
+.md2-compare-option > :not(.md2-compare-option-header):first-of-type {
+	margin-top: 0;
+}
+
+.md2-compare-vote .md2-compare-option {
+	transition:
+		border-color 0.15s,
+		transform 0.15s;
+}
+.md2-compare-vote .md2-compare-option:hover {
+	border-color: var(--md2-info);
+	transform: translateY(-1px);
+}
+
+/* ============================================================
+ * Tree — ASCII-style nested list with box-drawing connectors.
+ * ============================================================ */
+
+.md2-tree-root {
+	margin: 1rem 0;
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 0.88rem;
+	line-height: 1.55;
+	color: var(--md2-text);
+	background: var(--md2-bg-soft);
+	border: 1px solid var(--md2-border);
+	border-radius: var(--md2-radius);
+	padding: 0.6rem 0.9rem;
+	overflow-x: auto;
+}
+.md2-tree-title {
+	font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.md2-tree,
+.md2-tree-children {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.md2-tree > .md2-tree-item {
+	padding-left: 0;
+}
+.md2-tree > .md2-tree-item::before {
+	content: '';
+}
+
+.md2-tree-children {
+	padding-left: 1.25rem;
+	position: relative;
+}
+.md2-tree-children > .md2-tree-item {
+	position: relative;
+	padding-left: 1.5rem;
+}
+.md2-tree-children > .md2-tree-item::before {
+	content: '├── ';
+	position: absolute;
+	left: 0;
+	top: 0;
+	color: var(--md2-muted);
+	white-space: pre;
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.md2-tree-children > .md2-tree-item-last::before {
+	content: '└── ';
+}
+.md2-tree-children > .md2-tree-item::after {
+	content: '';
+	position: absolute;
+	left: 0.32rem;
+	top: 1.4rem;
+	bottom: -0.05rem;
+	width: 0;
+	border-left: 1px solid var(--md2-border);
+}
+.md2-tree-children > .md2-tree-item-last::after {
+	display: none;
+}
+.md2-tree-children > .md2-tree-item-leaf::after {
+	bottom: -0.05rem;
+}
+
+.md2-tree-item .md2-badge,
+.md2-tree-item .md2-jump {
+	margin-left: 0.4rem;
+}
+
+.md2-tree-item > p {
+	margin: 0;
+	display: inline;
+}
+.md2-tree-item > ul {
+	display: block;
+	margin-top: 0.1rem;
+}
+
+/* MD2 tier-3 directive styles: flow + chart (SVG-based) + a11y utility.
+ * Tokens come from `.md2` in md2.css (which derives them from daisyUI). */
+
+/* ============================================================
+ * Flow — node-and-edge SVG diagram.
+ * ============================================================ */
+
+.md2-flow,
+.md2-chart {
+	margin: 1.2rem 0;
+	padding: 0.9rem 1rem 1rem;
+	background: var(--md2-bg);
+	border: 1px solid var(--md2-border);
+	border-radius: var(--md2-radius);
+}
+.md2-flow {
+	overflow-x: auto;
+}
+
+.md2-flow-svg,
+.md2-chart-svg {
+	display: block;
+	width: 100%;
+	height: auto;
+	max-width: 100%;
+	font-family:
+		ui-sans-serif,
+		system-ui,
+		-apple-system,
+		'Segoe UI',
+		Roboto,
+		sans-serif;
+}
+.md2-flow-svg {
+	font-size: 13px;
+}
+.md2-chart-svg {
+	font-size: 11px;
+}
+
+.md2-flow-node-shape {
+	fill: var(--md2-bg-soft);
+	stroke: var(--md2-border);
+	stroke-width: 1.5;
+}
+.md2-flow-node-label {
+	fill: var(--md2-text);
+	font-size: 13px;
+	font-weight: 600;
+	dominant-baseline: middle;
+}
+.md2-flow-node-start .md2-flow-node-shape {
+	fill: color-mix(in oklab, var(--md2-info) 12%, var(--md2-bg));
+	stroke: var(--md2-info);
+}
+.md2-flow-node-end .md2-flow-node-shape {
+	fill: color-mix(in oklab, var(--md2-muted) 12%, var(--md2-bg));
+	stroke: var(--md2-muted);
+}
+.md2-flow-node-success .md2-flow-node-shape {
+	fill: var(--md2-success-bg);
+	stroke: var(--md2-success);
+	stroke-width: 2;
+}
+.md2-flow-node-fail .md2-flow-node-shape {
+	fill: var(--md2-blocking-bg);
+	stroke: var(--md2-blocking);
+	stroke-width: 2;
+}
+.md2-flow-node-decision .md2-flow-node-shape {
+	fill: var(--md2-warning-bg);
+	stroke: var(--md2-warning);
+}
+.md2-flow-node-process .md2-flow-node-shape {
+	fill: var(--md2-bg-soft);
+	stroke: var(--md2-border);
+}
+
+.md2-flow-edge-path {
+	stroke: var(--md2-muted);
+	stroke-width: 1.5;
+	fill: none;
+}
+.md2-flow-edge-back .md2-flow-edge-path,
+.md2-flow-edge-skip .md2-flow-edge-path {
+	stroke-dasharray: 4 3;
+}
+.md2-flow-edge-label-bg {
+	fill: var(--md2-bg);
+	stroke: var(--md2-border);
+	stroke-width: 1;
+}
+.md2-flow-edge-label-text {
+	fill: var(--md2-text);
+	font-size: 11px;
+	font-weight: 600;
+	dominant-baseline: middle;
+}
+
+/* ============================================================
+ * Chart — bar / line / sparkline SVGs.
+ * ============================================================ */
+
+.md2-chart-grid {
+	stroke: var(--md2-border);
+	stroke-width: 1;
+	stroke-dasharray: 2 3;
+	opacity: 0.7;
+}
+.md2-chart-axis {
+	stroke: var(--md2-muted);
+	stroke-width: 1;
+}
+.md2-chart-tick {
+	fill: var(--md2-muted);
+	font-size: 10px;
+	dominant-baseline: middle;
+}
+.md2-chart-xlabel {
+	fill: var(--md2-muted);
+	font-size: 10px;
+}
+
+.md2-chart-bar {
+	fill: var(--md2-info);
+}
+.md2-chart-bar:hover {
+	fill: color-mix(in oklab, var(--md2-info) 80%, black);
+}
+
+.md2-chart-line-path {
+	stroke: var(--md2-info);
+	stroke-width: 2;
+	fill: none;
+}
+.md2-chart-line-area {
+	fill: color-mix(in oklab, var(--md2-info) 14%, transparent);
+	stroke: none;
+}
+.md2-chart-dot {
+	fill: var(--md2-info);
+	stroke: var(--md2-bg);
+	stroke-width: 1.5;
+}
+.md2-chart-baseline {
+	stroke: var(--md2-warning);
+	stroke-width: 1.5;
+	stroke-dasharray: 4 3;
+}
+.md2-chart-baseline-label {
+	fill: var(--md2-warning);
+	font-size: 10px;
+	font-weight: 600;
+}
+
+.md2-chart-sparkline {
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0 0.15em;
+	padding: 0;
+	background: transparent;
+	border: 0;
+	border-radius: 3px;
+	line-height: 0;
+}
+.md2-chart-spark-svg {
+	display: inline-block;
+	width: 80px;
+	height: 20px;
+	vertical-align: middle;
+}
+.md2-chart-spark-path {
+	stroke: var(--md2-info);
+	stroke-width: 1.25;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+	fill: none;
+}
+.md2-chart-spark-last {
+	fill: var(--md2-info);
+}
+
+.md2-flow-empty,
+.md2-chart-empty {
+	color: var(--md2-muted);
+	font-size: 0.85rem;
+	font-style: italic;
+}
+
+/* ============================================================
+ * Visually-hidden — keeps content reachable by AT but invisible.
+ * Used by `.md2-chart-data` (screen-reader-readable data table).
+ * Do not rename or remove — the a11y agent depends on this class.
+ * ============================================================ */
+.md2-visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* Custom MD2 themes. Applied via `data-md2-theme` on the article wrapper.
+ *
+ * Each theme overrides the full `--md2-*` token set so every directive in
+ * the tier files keeps working. Daisy-derived themes don't need an entry
+ * here — they re-scope via `data-theme` and the regular md2.css aliases
+ * pick up the new daisyUI values automatically.
+ *
+ * Selector: `.md2[data-md2-theme='<slug>']`. Class + attribute beats the
+ * plain `.md2` rule in md2.css, so these overrides win.
+ *
+ * Soft-severity backgrounds use `color-mix` over `--md2-bg`, mirroring the
+ * pattern in md2.css. */
+
+/* ----------------------------- Sepia --------------------------------- */
+.md2[data-md2-theme='sepia'] {
+	--md2-bg: #f5ecd9;
+	--md2-bg-soft: #efe3c4;
+	--md2-border: #d8c79b;
+	--md2-text: #3b2a1a;
+	--md2-muted: #8a7551;
+
+	--md2-info: #4f6d8f;
+	--md2-warning: #a07028;
+	--md2-blocking: #a8442f;
+	--md2-success: #5e7a3a;
+	--md2-nit: #8a7c66;
+
+	--md2-info-bg: color-mix(in oklab, #4f6d8f 12%, #f5ecd9);
+	--md2-warning-bg: color-mix(in oklab, #a07028 14%, #f5ecd9);
+	--md2-blocking-bg: color-mix(in oklab, #a8442f 12%, #f5ecd9);
+	--md2-success-bg: color-mix(in oklab, #5e7a3a 14%, #f5ecd9);
+	--md2-nit-bg: color-mix(in oklab, #8a7c66 12%, #f5ecd9);
+
+	background: var(--md2-bg);
+	color: var(--md2-text);
+	font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+}
+
+/* --------------------------- Newspaper ------------------------------- */
+.md2[data-md2-theme='newspaper'] {
+	--md2-bg: #faf6ed;
+	--md2-bg-soft: #f1ebdc;
+	--md2-border: #cfc8b5;
+	--md2-text: #1a1a17;
+	--md2-muted: #5a5650;
+
+	--md2-info: #1d3a6e;
+	--md2-warning: #a07000;
+	--md2-blocking: #8a1c1c;
+	--md2-success: #2e5b2e;
+	--md2-nit: #73706a;
+
+	--md2-info-bg: color-mix(in oklab, #1d3a6e 10%, #faf6ed);
+	--md2-warning-bg: color-mix(in oklab, #a07000 14%, #faf6ed);
+	--md2-blocking-bg: color-mix(in oklab, #8a1c1c 10%, #faf6ed);
+	--md2-success-bg: color-mix(in oklab, #2e5b2e 12%, #faf6ed);
+	--md2-nit-bg: color-mix(in oklab, #73706a 10%, #faf6ed);
+
+	background: var(--md2-bg);
+	color: var(--md2-text);
+	font-family: 'Times New Roman', Times, 'Liberation Serif', Georgia, serif;
+}
+
+/* -------------------------- High contrast ---------------------------- */
+.md2[data-md2-theme='high-contrast'] {
+	--md2-bg: #ffffff;
+	--md2-bg-soft: #f4f4f4;
+	--md2-border: #000000;
+	--md2-text: #000000;
+	--md2-muted: #333333;
+
+	--md2-info: #0040c0;
+	--md2-warning: #c05000;
+	--md2-blocking: #c8001c;
+	--md2-success: #006a30;
+	--md2-nit: #444444;
+
+	--md2-info-bg: color-mix(in oklab, #0040c0 14%, #ffffff);
+	--md2-warning-bg: color-mix(in oklab, #c05000 16%, #ffffff);
+	--md2-blocking-bg: color-mix(in oklab, #c8001c 14%, #ffffff);
+	--md2-success-bg: color-mix(in oklab, #006a30 14%, #ffffff);
+	--md2-nit-bg: color-mix(in oklab, #444444 10%, #ffffff);
+
+	background: var(--md2-bg);
+	color: var(--md2-text);
+}
+
+/* --------------------------- Solarized ------------------------------- */
+.md2[data-md2-theme='solarized'] {
+	/* Ethan Schoonover's solarized-light. */
+	--md2-bg: #fdf6e3;
+	--md2-bg-soft: #eee8d5;
+	--md2-border: #93a1a1;
+	--md2-text: #586e75;
+	--md2-muted: #93a1a1;
+
+	--md2-info: #268bd2;
+	--md2-warning: #cb4b16;
+	--md2-blocking: #dc322f;
+	--md2-success: #859900;
+	--md2-nit: #657b83;
+
+	--md2-info-bg: color-mix(in oklab, #268bd2 12%, #fdf6e3);
+	--md2-warning-bg: color-mix(in oklab, #cb4b16 14%, #fdf6e3);
+	--md2-blocking-bg: color-mix(in oklab, #dc322f 12%, #fdf6e3);
+	--md2-success-bg: color-mix(in oklab, #859900 14%, #fdf6e3);
+	--md2-nit-bg: color-mix(in oklab, #657b83 10%, #fdf6e3);
+
+	background: var(--md2-bg);
+	color: var(--md2-text);
+}
+
+
+.md2 {
+	--md2-radius: 0.5rem;
+
+	/* Severity colours map to daisyUI semantics. */
+	--md2-info: var(--color-info);
+	--md2-warning: var(--color-warning);
+	--md2-blocking: var(--color-error);
+	--md2-success: var(--color-success);
+	--md2-nit: var(--color-neutral);
+
+	/* Surfaces / text. */
+	--md2-bg: var(--color-base-100);
+	--md2-bg-soft: var(--color-base-200);
+	--md2-border: var(--color-base-300);
+	--md2-text: var(--color-base-content);
+	--md2-muted: color-mix(in oklab, var(--color-base-content) 60%, var(--color-base-100));
+
+	/* Soft per-severity backgrounds: low-saturation tint over base-100. */
+	--md2-info-bg: color-mix(in oklab, var(--color-info) 12%, var(--color-base-100));
+	--md2-warning-bg: color-mix(in oklab, var(--color-warning) 12%, var(--color-base-100));
+	--md2-blocking-bg: color-mix(in oklab, var(--color-error) 12%, var(--color-base-100));
+	--md2-success-bg: color-mix(in oklab, var(--color-success) 14%, var(--color-base-100));
+	--md2-nit-bg: color-mix(in oklab, var(--color-neutral) 10%, var(--color-base-100));
+
+	font-family:
+		ui-sans-serif,
+		system-ui,
+		-apple-system,
+		'Segoe UI',
+		Roboto,
+		'Helvetica Neue',
+		Arial,
+		sans-serif;
+	color: var(--md2-text);
+	line-height: 1.65;
+}
+
+.md2 h1,
+.md2 h2,
+.md2 h3 {
+	font-weight: 700;
+	line-height: 1.25;
+	margin: 1.5em 0 0.6em;
+}
+.md2 h1 {
+	font-size: 1.875rem;
+}
+.md2 h2 {
+	font-size: 1.4rem;
+}
+.md2 h3 {
+	font-size: 1.15rem;
+}
+.md2 p {
+	margin: 0.7em 0;
+}
+.md2 ul,
+.md2 ol {
+	padding-left: 1.5em;
+	margin: 0.7em 0;
+}
+.md2 ul {
+	list-style: disc;
+}
+.md2 ol {
+	list-style: decimal;
+}
+.md2 :not(pre) > code:not(.md2-code-src) {
+	background: var(--md2-bg-soft);
+	border: 1px solid var(--md2-border);
+	border-radius: 4px;
+	padding: 0.1em 0.35em;
+	font-size: 0.9em;
+}
+.md2 a {
+	color: var(--md2-info);
+	text-decoration: underline;
+}
+
+/* ------------------------------------------------------------------ *
+ * Callout
+ * ------------------------------------------------------------------ */
+.md2-callout {
+	border-left: 4px solid var(--md2-info);
+	background: var(--md2-info-bg);
+	border-radius: 0 var(--md2-radius) var(--md2-radius) 0;
+	padding: 0.85rem 1rem;
+	margin: 1rem 0;
+}
+.md2-callout-warning {
+	border-left-color: var(--md2-warning);
+	background: var(--md2-warning-bg);
+}
+.md2-callout-blocking {
+	border-left-color: var(--md2-blocking);
+	background: var(--md2-blocking-bg);
+}
+.md2-callout-nit {
+	border-left-color: var(--md2-nit);
+	background: var(--md2-nit-bg);
+}
+.md2-callout-success {
+	border-left-color: var(--md2-success);
+	background: var(--md2-success-bg);
+}
+
+.md2-callout-title {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	font-weight: 700;
+	margin-bottom: 0.25rem;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	font-size: 0.75rem;
+	color: var(--md2-muted);
+}
+.md2-callout-icon,
+.md2-badge-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	color: inherit;
+}
+.md2-callout-icon {
+	width: 1rem;
+	height: 1rem;
+	flex-basis: 1rem;
+}
+.md2-badge-icon {
+	width: 0.85rem;
+	height: 0.85rem;
+	flex-basis: 0.85rem;
+}
+.md2-callout-icon svg,
+.md2-badge-icon svg {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+.md2-callout-title-icon-only {
+	display: inline-flex;
+	margin-bottom: 0.35rem;
+}
+.md2-callout-dismissible {
+	position: relative;
+	padding-right: 2.25rem;
+}
+.md2-callout-dismiss {
+	position: absolute;
+	top: 0.35rem;
+	right: 0.45rem;
+	background: transparent;
+	border: 0;
+	color: var(--md2-muted);
+	font-size: 1.15rem;
+	line-height: 1;
+	cursor: pointer;
+	padding: 0.15rem 0.4rem;
+	border-radius: 4px;
+}
+.md2-callout-dismiss:hover {
+	background: color-mix(in oklab, var(--md2-text) 8%, transparent);
+	color: var(--md2-text);
+}
+.md2-callout-dismiss:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 1px;
+}
+
+/* ------------------------------------------------------------------ *
+ * Columns
+ * ------------------------------------------------------------------ */
+.md2-columns {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(var(--md2-cols-min, 220px), 1fr));
+	gap: var(--md2-cols-gap, 1rem);
+	margin: 1rem 0;
+}
+.md2-column {
+	background: var(--md2-bg);
+	border: 1px solid var(--md2-border);
+	border-radius: var(--md2-radius);
+	padding: 0.9rem 1rem;
+}
+
+/* ------------------------------------------------------------------ *
+ * Details
+ * ------------------------------------------------------------------ */
+.md2-details {
+	border: 1px solid var(--md2-border);
+	border-radius: var(--md2-radius);
+	padding: 0.5rem 0.9rem;
+	margin: 0.8rem 0;
+	background: var(--md2-bg-soft);
+}
+.md2-details[open] {
+	background: var(--md2-bg);
+}
+.md2-details-summary {
+	cursor: pointer;
+	font-weight: 600;
+	list-style: none;
+}
+.md2-details-summary::-webkit-details-marker {
+	display: none;
+}
+.md2-details-summary::before {
+	content: '▸ ';
+	display: inline-block;
+	transition: transform 0.15s;
+}
+.md2-details[open] > .md2-details-summary::before {
+	content: '▾ ';
+}
+
+/* ------------------------------------------------------------------ *
+ * Risk map
+ * ------------------------------------------------------------------ */
+.md2-risk-map {
+	border: 1px solid var(--md2-border);
+	border-radius: var(--md2-radius);
+	padding: 0.6rem 0.9rem;
+	background: var(--md2-bg-soft);
+	margin: 1rem 0;
+}
+.md2-risk-map-title,
+.md2-timeline-title,
+.md2-tree-title,
+.md2-flow-title,
+.md2-chart-title,
+.md2-compare-title {
+	display: block;
+	font-weight: 700;
+	font-size: 0.8rem;
+	color: var(--md2-muted);
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	margin-bottom: 0.4rem;
+}
+.md2-risk-map ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.md2-risk-map li {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.2rem 0;
+	border-bottom: 1px dashed var(--md2-border);
+}
+.md2-risk-map li:last-child {
+	border-bottom: 0;
+}
+
+/* ------------------------------------------------------------------ *
+ * Badge — pill, severity-tinted.
+ * ------------------------------------------------------------------ */
+.md2-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+	font-size: 0.7rem;
+	font-weight: 700;
+	padding: 0.1rem 0.5rem;
+	border-radius: 999px;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	background: var(--md2-nit-bg);
+	color: var(--md2-nit);
+	border: 1px solid var(--md2-border);
+	vertical-align: middle;
+}
+.md2-badge-blocking {
+	background: var(--md2-blocking-bg);
+	color: var(--md2-blocking);
+	border-color: color-mix(in oklab, var(--md2-blocking) 30%, transparent);
+}
+.md2-badge-warning {
+	background: var(--md2-warning-bg);
+	color: var(--md2-warning);
+	border-color: color-mix(in oklab, var(--md2-warning) 30%, transparent);
+}
+.md2-badge-info {
+	background: var(--md2-info-bg);
+	color: var(--md2-info);
+	border-color: color-mix(in oklab, var(--md2-info) 30%, transparent);
+}
+.md2-badge-nit {
+	background: var(--md2-nit-bg);
+	color: var(--md2-nit);
+}
+.md2-badge-success {
+	background: var(--md2-success-bg);
+	color: var(--md2-success);
+	border-color: color-mix(in oklab, var(--md2-success) 30%, transparent);
+}
+.md2-icon-glyph {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+	font-style: normal;
+}
+
+/* ------------------------------------------------------------------ *
+ * Jump link
+ * ------------------------------------------------------------------ */
+.md2-jump {
+	font-size: 0.8rem;
+	color: var(--md2-info);
+	text-decoration: none;
+	border-bottom: 1px dashed currentColor;
+}
+.md2-jump::before {
+	content: '↪ ';
+	opacity: 0.6;
+}
+
+/* ------------------------------------------------------------------ *
+ * Annotated code
+ *
+ * The code-block aesthetic is intentionally dark in both themes — code
+ * editors are conventionally dark, and the Dracula token palette below
+ * is tuned for that. The dark backdrop (`#0f172a` / `#1e293b`) is kept
+ * as a hard-coded shell so token contrast stays consistent across the
+ * site theme.
+ * ------------------------------------------------------------------ */
+.md2-annotate-code {
+	--md2-code-bg: #0f172a;
+	--md2-code-bg-2: #1e293b;
+	--md2-code-fg: #e2e8f0;
+	--md2-code-muted: #94a3b8;
+	border: 1px solid var(--md2-border);
+	border-radius: var(--md2-radius);
+	overflow: clip;
+	margin: 1rem 0;
+	background: var(--md2-code-bg);
+	color: var(--md2-code-fg);
+}
+.md2-annotate-code-caption {
+	background: var(--md2-code-bg-2);
+	color: var(--md2-code-muted);
+	padding: 0.3rem 0.9rem;
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.md2-annotate-code-summary {
+	cursor: pointer;
+	list-style: none;
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	user-select: none;
+}
+.md2-annotate-code-summary::-webkit-details-marker {
+	display: none;
+}
+.md2-annotate-code-summary::before {
+	content: '▸';
+	display: inline-block;
+	color: var(--md2-code-muted);
+	font-size: 0.7rem;
+	transition: transform 0.15s;
+}
+.md2-annotate-code-collapsible[open] > .md2-annotate-code-summary::before {
+	content: '▾';
+}
+.md2-annotate-code-lang {
+	font-weight: 700;
+}
+.md2-annotate-code-meta {
+	margin-left: auto;
+	display: flex;
+	gap: 0.4rem;
+	align-items: center;
+	text-transform: none;
+	letter-spacing: 0;
+	font-size: 0.7rem;
+	color: var(--md2-code-muted);
+}
+.md2-annotate-code-collapsible:not([open]) .md2-annotate-code-body {
+	display: none;
+}
+.md2-annotate-code-body {
+	margin: 0;
+	padding: 0.6rem 0 0;
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 0.85rem;
+	line-height: 1.55;
+	overflow-x: auto;
+	overflow-y: hidden;
+	scrollbar-width: auto;
+	scrollbar-color: #64748b var(--md2-code-bg-2);
+}
+.md2-annotate-code-body::-webkit-scrollbar {
+	height: 14px;
+}
+.md2-annotate-code-body::-webkit-scrollbar-thumb {
+	background: #64748b;
+	border-radius: 7px;
+	border: 3px solid var(--md2-code-bg-2);
+	min-width: 40px;
+}
+.md2-annotate-code-body::-webkit-scrollbar-thumb:hover {
+	background: #94a3b8;
+}
+.md2-annotate-code-body::-webkit-scrollbar-track {
+	background: var(--md2-code-bg-2);
+}
+.md2-code-row {
+	display: block;
+	width: max-content;
+	min-width: 100%;
+}
+.md2-code-row-blocking {
+	background: color-mix(in srgb, var(--md2-blocking) 22%, var(--md2-code-bg));
+}
+.md2-code-row-nit {
+	background: color-mix(in srgb, var(--md2-nit) 24%, var(--md2-code-bg));
+}
+.md2-code-row-warning {
+	background: color-mix(in srgb, var(--md2-warning) 22%, var(--md2-code-bg));
+}
+.md2-code-row-info {
+	background: color-mix(in srgb, var(--md2-info) 22%, var(--md2-code-bg));
+}
+.md2-code-line {
+	display: grid;
+	grid-template-columns: 3.5rem 1fr;
+	align-items: center;
+	gap: 0.6rem;
+	padding: 0 0.9rem;
+}
+.md2-code-ln {
+	color: #64748b;
+	user-select: none;
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+}
+.md2-code-src {
+	white-space: pre;
+	background: transparent;
+	border: 0;
+	padding: 0;
+	color: inherit;
+	font-family: inherit;
+	font-size: inherit;
+}
+
+/* Prism token theme — Dracula-inspired, vivid on figure bg. */
+.md2-annotate-code .md2-code-src {
+	color: #f8f8f2;
+}
+.md2-annotate-code .token.comment,
+.md2-annotate-code .token.prolog,
+.md2-annotate-code .token.doctype,
+.md2-annotate-code .token.cdata {
+	color: #6272a4;
+	font-style: italic;
+}
+.md2-annotate-code .token.punctuation {
+	color: #f8f8f2;
+}
+.md2-annotate-code .token.namespace {
+	opacity: 0.9;
+}
+.md2-annotate-code .token.property,
+.md2-annotate-code .token.tag,
+.md2-annotate-code .token.constant,
+.md2-annotate-code .token.symbol,
+.md2-annotate-code .token.deleted,
+.md2-annotate-code .token.operator,
+.md2-annotate-code .token.entity,
+.md2-annotate-code .token.url {
+	color: #ff79c6;
+}
+.md2-annotate-code .token.boolean,
+.md2-annotate-code .token.number {
+	color: #bd93f9;
+}
+.md2-annotate-code .token.selector,
+.md2-annotate-code .token.attr-name,
+.md2-annotate-code .token.string,
+.md2-annotate-code .token.char,
+.md2-annotate-code .token.builtin,
+.md2-annotate-code .token.inserted {
+	color: #f1fa8c;
+}
+.md2-annotate-code .token.variable {
+	color: #f8f8f2;
+}
+.md2-annotate-code .token.atrule,
+.md2-annotate-code .token.attr-value,
+.md2-annotate-code .token.keyword {
+	color: #ff79c6;
+	font-weight: 600;
+}
+.md2-annotate-code .token.function,
+.md2-annotate-code .token.class-name {
+	color: #50fa7b;
+}
+.md2-annotate-code .token.regex,
+.md2-annotate-code .token.important {
+	color: #ffb86c;
+}
+.md2-annotate-code .token.important,
+.md2-annotate-code .token.bold {
+	font-weight: 700;
+}
+.md2-annotate-code .token.italic {
+	font-style: italic;
+}
+.md2-code-ann-row {
+	padding: 0.3rem 0.9rem 0.45rem 5rem;
+	font-family: ui-sans-serif, system-ui, sans-serif;
+	font-size: 0.78rem;
+	line-height: 1.45;
+	color: var(--md2-code-fg);
+}
+.md2-code-ann-row .md2-badge {
+	margin-right: 0.4rem;
+	vertical-align: baseline;
+}
+
+/* ------------------------------------------------------------------ *
+ * W5.M — focus mode. Toggled by `.md2--focus` on the article wrapper.
+ * The active section is tagged element-by-element by `useFocusMode`
+ * (no DOM wrapping), so we dim *everything* under `.md2--focus` and
+ * then bring back opacity on `.md2-section--focused` siblings.
+ * ------------------------------------------------------------------ */
+.md2--focus
+	:where(
+		h2,
+		h3,
+		p,
+		ul,
+		ol,
+		blockquote,
+		pre,
+		table,
+		.md2-callout,
+		.md2-steps,
+		.md2-tabs,
+		.md2-figure,
+		.md2-annotate-code,
+		.md2-columns,
+		.md2-details,
+		.md2-risk-map,
+		.md2-timeline,
+		.md2-flow,
+		.md2-chart,
+		.md2-compare,
+		.md2-tree
+	) {
+	transition: opacity 200ms ease;
+	opacity: 0.35;
+}
+.md2--focus .md2-section--focused,
+.md2--focus
+	.md2-section--focused:where(
+		h2,
+		h3,
+		p,
+		ul,
+		ol,
+		blockquote,
+		pre,
+		table,
+		.md2-callout,
+		.md2-steps,
+		.md2-tabs,
+		.md2-figure,
+		.md2-annotate-code,
+		.md2-columns,
+		.md2-details,
+		.md2-risk-map,
+		.md2-timeline,
+		.md2-flow,
+		.md2-chart,
+		.md2-compare,
+		.md2-tree
+	) {
+	opacity: 1;
+}

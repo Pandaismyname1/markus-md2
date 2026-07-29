@@ -25,6 +25,21 @@ npm install markus-md2
 
 The package ships ESM only and needs Node 18+. It runs unchanged in the browser — the same compiler powers server-rendered and client-rendered views.
 
+### Or use it from a CDN, with no install
+
+`browser/md2.js` is a self-contained ESM bundle with every dependency inlined, committed to the repository so it can be served straight from git. Pin a tag — never `@main` — so a page renders the same way a year from now:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Pandaismyname1/markus-md2@v0.1.0/browser/md2.standalone.css" />
+<script type="module">
+	import { compileMd2 } from 'https://cdn.jsdelivr.net/gh/Pandaismyname1/markus-md2@v0.1.0/browser/md2.js';
+
+	document.querySelector('.md2').innerHTML = await compileMd2(source);
+</script>
+```
+
+Two URLs, no build step, no package manager. Useful for docs pages, sandboxed iframes, and anywhere a page receives MD2 source and renders it client-side — the source travels instead of the compiled HTML, which is dramatically smaller. Use `md2.standalone.css` when the host page has no design system, or `md2.css` when you supply the tokens yourself.
+
 ## Compiling
 
 Three entry points, all in `markus-md2` (or `markus-md2/compile`):

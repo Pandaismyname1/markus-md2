@@ -23,7 +23,8 @@
 	"type": "module",
 	"sideEffects": [
 		"*.css",
-		"./dist/prism-langs.js"
+		"**/prism-langs.ts",
+		"**/prism-langs.js"
 	],
 	"exports": {
 		".": {
@@ -38,6 +39,8 @@
 			"types": "./dist/upgrade/index.d.ts",
 			"default": "./dist/upgrade/index.js"
 		},
+		"./browser": "./browser/md2.js",
+		"./browser/*": "./browser/*",
 		"./md2.css": "./css/md2.css",
 		"./md2-host.css": "./css/md2-host.css",
 		"./md2.bundle.css": "./dist/md2.bundle.css",
@@ -47,13 +50,14 @@
 	},
 	"files": [
 		"dist",
+		"browser",
 		"css",
 		"fixtures",
 		"README.md",
 		"LICENSE"
 	],
 	"scripts": {
-		"build": "tsc && node scripts/bundle-css.mjs",
+		"build": "tsc && node scripts/bundle-css.mjs && node scripts/bundle-browser.mjs",
 		"dev": "tsc --watch",
 		"test": "vitest --run",
 		"test:watch": "vitest",
@@ -76,6 +80,7 @@
 		"@types/mdast": "^4.0.4",
 		"@types/node": "^24",
 		"@types/prismjs": "^1.26.6",
+		"esbuild": "^0.28.1",
 		"typescript": "^5.9.0",
 		"vitest": "^4.1.3"
 	},
