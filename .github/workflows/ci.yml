@@ -20,8 +20,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # package.json promises >=18, so test what it promises.
-        node: [18, 20, 22]
+        # Vitest 4's bundler imports `styleText` from node:util, which needs
+        # 20.12+, so the test runner can't run on 18 even though the library
+        # can. Node 18 is covered by the smoke job below instead of being
+        # quietly dropped from the support promise in `engines`.
+        node: [20, 22]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
@@ -52,3 +55,34 @@ jobs:
             git status --porcelain browser/
             exit 1
           fi
+
+  # `engines` promises Node 18, so prove the built package actually runs there.
+  # This is a real check, not a formality: the compiler is what ships, and it
+  # must import and produce correct output on the oldest version we claim.
+  smoke-node18:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 18
+      - name: Compile a document on Node 18
+        run: |
+          node --version
+          node -e "
+            import('./dist/index.js').then(async (m) => {
+              const html = await m.compileMd2(':::callout{severity=blocking title=T}\nBody.\n:::');
+              if (!html.includes('md2-callout-blocking')) { throw new Error('unexpected output: ' + html); }
+              const { source } = m.upgradeMarkdown('> **Note:** hi');
+              if (!source.startsWith(':::callout')) { throw new Error('upgrade failed: ' + source); }
+              console.log('Node 18 smoke test passed');
+            }).catch((err) => { console.error(err); process.exit(1); });
+          "
