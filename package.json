@@ -1,6 +1,7 @@
 {
 	"name": "markus-md2",
 	"version": "0.1.1",
+	"private": true,
 	"description": "MD2 — a directive layer over Markdown for AI-authored documents. Compiler, stylesheet, and Markdown-to-MD2 auto-upgrade.",
 	"keywords": [
 		"markdown",
@@ -58,13 +59,12 @@
 		"LICENSE"
 	],
 	"scripts": {
-		"//prepare": "Runs on git installs (npm skips prepublishOnly there), so `npm install github:...` produces a built dist/ instead of a package with no entry point.",
+		"//prepare": "Git installs are the distribution channel and dist/ is not committed — this builds it during `npm install github:...` so the package has an entry point.",
 		"prepare": "npm run build",
 		"build": "tsc && node scripts/bundle-css.mjs && node scripts/bundle-browser.mjs",
 		"dev": "tsc --watch",
 		"test": "vitest --run",
-		"test:watch": "vitest",
-		"prepublishOnly": "npm run test && npm run build"
+		"test:watch": "vitest"
 	},
 	"dependencies": {
 		"hast-util-to-html": "^9.0.5",

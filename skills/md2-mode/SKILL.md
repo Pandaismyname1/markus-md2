@@ -59,7 +59,7 @@ The test is whether the *shape* of the answer carries meaning. Three findings at
 Call `mcp__visualize__show_widget` with this template. The MD2 source lives in a `text/plain` script tag, **not** a JavaScript string — inside a template literal every backslash, backtick and `${` becomes a syntax hazard, and a syntax error means the module never runs, the widget renders empty, and nothing reports it.
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Pandaismyname1/markus-md2@v0.1.0/browser/md2.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Pandaismyname1/markus-md2@v0.1.1/browser/md2.css" />
 <h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">One sentence describing the document for screen readers.</h2>
 <style>
 .md2{--md2-radius:8px;--md2-info:var(--text-accent);--md2-warning:var(--text-warning);--md2-blocking:var(--text-danger);--md2-success:var(--text-success);--md2-nit:var(--text-secondary);--md2-bg:var(--surface-2);--md2-bg-soft:var(--surface-1);--md2-border:var(--border);--md2-text:var(--text-primary);--md2-muted:var(--text-secondary);--md2-info-bg:var(--bg-accent);--md2-warning-bg:var(--bg-warning);--md2-blocking-bg:var(--bg-danger);--md2-success-bg:var(--bg-success);--md2-nit-bg:var(--surface-1);font-size:16px;padding-bottom:1rem}
@@ -81,7 +81,7 @@ are all safe in here — nothing in this block is parsed as JavaScript.
 	const src = document.getElementById('md2-src').textContent;
 	try {
 		const { compileMd2 } = await import(
-			'https://cdn.jsdelivr.net/gh/Pandaismyname1/markus-md2@v0.1.0/browser/md2.js'
+			'https://cdn.jsdelivr.net/gh/Pandaismyname1/markus-md2@v0.1.1/browser/md2.js'
 		);
 		out.innerHTML = await compileMd2(src);
 	} catch {

@@ -6,28 +6,29 @@ on:
 
 permissions:
   contents: write
-  id-token: write # npm provenance
 
 jobs:
   release:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      # SHA-pinned: this job holds NPM_TOKEN, and a mutable tag on a third-party
-      # action is a path to exfiltrating it. Dependabot's github-actions
-      # ecosystem keeps these current.
+      # SHA-pinned rather than tag-pinned: a mutable tag on a third-party action
+      # is a supply-chain hole, and Dependabot's github-actions ecosystem keeps
+      # these current.
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 20
           cache: npm
-          registry-url: https://registry.npmjs.org
 
       # See the note in ci.yml — a Windows-generated lock breaks `npm ci` on Linux.
       - run: npm install --no-audit --no-fund
       - run: npm test
       - run: npm run build
 
+      # browser/ is committed because jsDelivr serves it straight from the tag.
+      # If it doesn't match a fresh build of this commit, the CDN would serve
+      # code that nobody reviewed.
       - name: Verify the committed bundle matches a fresh build
         run: |
           if [ -n "$(git status --porcelain browser/)" ]; then
@@ -45,26 +46,21 @@ jobs:
             exit 1
           fi
 
-      # Both steps below are idempotent. A re-run after a partial failure used to
-      # die on EPUBLISHCONFLICT before reaching the release step, leaving a
-      # published version with no GitHub release and no way to finish the job.
+      # Distribution is GitHub only — the tag itself is the artifact, served by
+      # jsDelivr and installable with `npm install github:…#<tag>`. The files
+      # below are attached so a consumer can download a pinned copy without a
+      # CDN or a clone. Idempotent so a re-run after a partial failure finishes.
       - name: Create the GitHub release
         run: |
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            echo "Release $GITHUB_REF_NAME already exists, leaving it alone."
+            echo "Release $GITHUB_REF_NAME already exists; uploading assets with --clobber."
+            gh release upload "$GITHUB_REF_NAME" \
+              browser/md2.js browser/md2.css browser/md2.standalone.css \
+              dist/md2.bundle.css dist/md2.standalone.css --clobber
           else
-            gh release create "$GITHUB_REF_NAME" --generate-notes --verify-tag
+            gh release create "$GITHUB_REF_NAME" --generate-notes --verify-tag \
+              browser/md2.js browser/md2.css browser/md2.standalone.css \
+              dist/md2.bundle.css dist/md2.standalone.css
           fi
         env:
           GH_TOKEN: ${{ github.token }}
-
-      - name: Publish to npm
-        run: |
-          VERSION="$(node -p "require('./package.json').version")"
-          if npm view "markus-md2@$VERSION" version >/dev/null 2>&1; then
-            echo "markus-md2@$VERSION is already on the registry, nothing to publish."
-          else
-            npm publish --provenance --access public
-          fi
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
