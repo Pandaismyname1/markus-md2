@@ -48,19 +48,21 @@ jobs:
 
       # Distribution is GitHub only — the tag itself is the artifact, served by
       # jsDelivr and installable with `npm install github:…#<tag>`. The files
-      # below are attached so a consumer can download a pinned copy without a
-      # CDN or a clone. Idempotent so a re-run after a partial failure finishes.
+      # below are attached so a consumer can vendor a pinned copy without a CDN
+      # or a clone. Idempotent, so a re-run after a partial failure finishes.
+      #
+      # Only the browser/ copies are attached: gh names each asset by basename,
+      # and dist/md2.standalone.css collides with browser/md2.standalone.css,
+      # which fails the whole upload. They're byte-identical anyway — the two
+      # build steps write the same flattened CSS to both places.
       - name: Create the GitHub release
         run: |
+          ASSETS="browser/md2.js browser/md2.css browser/md2.standalone.css"
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
             echo "Release $GITHUB_REF_NAME already exists; uploading assets with --clobber."
-            gh release upload "$GITHUB_REF_NAME" \
-              browser/md2.js browser/md2.css browser/md2.standalone.css \
-              dist/md2.bundle.css dist/md2.standalone.css --clobber
+            gh release upload "$GITHUB_REF_NAME" $ASSETS --clobber
           else
-            gh release create "$GITHUB_REF_NAME" --generate-notes --verify-tag \
-              browser/md2.js browser/md2.css browser/md2.standalone.css \
-              dist/md2.bundle.css dist/md2.standalone.css
+            gh release create "$GITHUB_REF_NAME" --generate-notes --verify-tag $ASSETS
           fi
         env:
           GH_TOKEN: ${{ github.token }}
