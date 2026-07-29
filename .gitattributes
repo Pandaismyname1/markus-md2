@@ -1,0 +1,14 @@
+# Normalise line endings on the way in. Without this, a commit from Windows
+# rewrites every file to CRLF and the diff swallows the actual change.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.woff2 binary
+
+# Generated, committed so CDNs can serve them from git — collapse them in diffs
+# and keep them out of language statistics.
+browser/md2.js linguist-generated=true
+browser/md2.css linguist-generated=true
+browser/md2.standalone.css linguist-generated=true
+package-lock.json linguist-generated=true

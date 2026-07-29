@@ -1,0 +1,40 @@
+name: Feature request
+description: A new directive, attribute, or capability
+labels: ['enhancement']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        MD2 stays small on purpose — every directive is markup an AI has to learn and
+        a reader has to recognise. The strongest case for a new one is a document
+        shape that existing directives render badly.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What document are you trying to write?
+      description: Describe the content, not the feature. What is the reader meant to take away?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed syntax
+      description: How you'd want to write it.
+      render: markdown
+      placeholder: |
+        :::matrix{rows=3 cols=2}
+        ...
+        :::
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What you tried with today's directives
+      description: >
+        Which existing directive comes closest, and where does it fall short?
+    validations:
+      required: true
