@@ -963,6 +963,48 @@
 .md2 ol {
 	list-style: decimal;
 }
+/* Base tables (GFM pipe syntax). `display: block` + `overflow-x: auto` lets a
+ * wide table scroll inside the column instead of stretching the article; the
+ * anonymous-table fixup keeps the rows laying out as a table.
+ * `.md2-visually-hidden` tables — the chart data table — are excluded so these
+ * rules can't override the clipping that hides them. */
+.md2 table:not(.md2-visually-hidden) {
+	display: block;
+	width: fit-content;
+	max-width: 100%;
+	margin: 1rem 0;
+	overflow-x: auto;
+	border-collapse: collapse;
+	border: 1px solid var(--md2-border);
+	border-radius: var(--md2-radius);
+	font-size: 0.95em;
+}
+.md2 table:not(.md2-visually-hidden) :is(th, td) {
+	padding: 0.45em 0.75em;
+	text-align: left;
+	vertical-align: top;
+	border-bottom: 1px solid var(--md2-border);
+}
+.md2 table:not(.md2-visually-hidden) :is(th, td):not(:last-child) {
+	border-right: 1px solid var(--md2-border);
+}
+/* Column alignment from the delimiter row (`:---:`, `---:`) arrives as the
+ * presentational `align` attribute, which loses to the rule above — restate it. */
+.md2 table:not(.md2-visually-hidden) :is(th, td)[align='center'] {
+	text-align: center;
+}
+.md2 table:not(.md2-visually-hidden) :is(th, td)[align='right'] {
+	text-align: right;
+}
+.md2 table:not(.md2-visually-hidden) thead th {
+	background: var(--md2-bg-soft);
+	font-weight: 600;
+	white-space: nowrap;
+}
+.md2 table:not(.md2-visually-hidden) tbody tr:last-child > * {
+	border-bottom: 0;
+}
+
 .md2 :not(pre) > code:not(.md2-code-src) {
 	background: var(--md2-bg-soft);
 	border: 1px solid var(--md2-border);

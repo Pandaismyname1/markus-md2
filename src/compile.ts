@@ -1,5 +1,6 @@
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
+import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
 import rehypeRaw from 'rehype-raw';
 import rehypeStringify from 'rehype-stringify';
@@ -11,6 +12,7 @@ import './prism-langs.js';
 
 const processor = unified()
 	.use(remarkParse)
+	.use(remarkGfm)
 	.use(remarkDirective)
 	.use(md2DirectiveTransform)
 	.use(remarkRehype, { allowDangerousHtml: true })

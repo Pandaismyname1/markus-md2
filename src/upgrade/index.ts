@@ -28,6 +28,7 @@
 
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
+import remarkGfm from 'remark-gfm';
 import remarkDirective from 'remark-directive';
 import { visit } from 'unist-util-visit';
 import type { Root } from 'mdast';
@@ -63,7 +64,7 @@ interface DirectiveRange {
 	end: number;
 }
 
-const parser = unified().use(remarkParse).use(remarkDirective);
+const parser = unified().use(remarkParse).use(remarkGfm).use(remarkDirective);
 
 /**
  * Upgrade likely Markdown patterns to MD2 directives.

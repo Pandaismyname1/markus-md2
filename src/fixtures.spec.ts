@@ -77,6 +77,17 @@ describe('kitchen-sink fixture', () => {
 		expect(html).toContain('md2-chart-sparkline');
 	});
 
+	it('renders the fixture tables, standalone and nested in a callout', async () => {
+		const html = await compileMd2(kitchenSink);
+		// Two tables: the standalone attribute grid and one inside a callout.
+		expect(html.match(/<table>/g)?.length).toBe(2);
+		// Alignment from the delimiter row survives to the output.
+		expect(html).toContain('<th align="center">Required</th>');
+		expect(html).toContain('<th align="right">p95</th>');
+		// No delimiter row leaking through as text.
+		expect(html).not.toContain('| ---');
+	});
+
 	it('renders the annotated-code block with severity tints', async () => {
 		const html = await compileMd2(kitchenSink);
 		// Fixture has blocking, warning, nit, info annotations. Row tints use
