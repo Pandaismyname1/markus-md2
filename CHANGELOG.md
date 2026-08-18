@@ -6,6 +6,14 @@ Emitted `.md2-*` class names are part of the public API — they won't change ou
 
 ## [Unreleased]
 
+### Fixed
+
+- **Tables didn't render.** The compiler ran plain `remark-parse`, which is CommonMark and has no table syntax, so a GFM pipe table fell through as a single paragraph — the delimiter row and every `|` visible as text. `remark-gfm` is now part of the pipeline (and of the `upgradeMarkdown` parser, so both agree on where a table starts and ends), which also brings strikethrough, task lists, autolink literals and footnotes. The browser bundle grows by roughly 37 KB.
+
+### Added
+
+- **Table styles.** `css/md2.css` now styles `table`, `th` and `td` from the `--md2-*` token layer: a bordered header row on `--md2-bg-soft`, per-cell rules, and horizontal scrolling for a table wider than its column. Column alignment from the delimiter row is honoured. Visually hidden tables — the `chart` data table — are excluded.
+
 ## [0.1.1] — 2026-07-29
 
 ### Changed
