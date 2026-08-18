@@ -37,9 +37,9 @@ MD2 is distributed from GitHub rather than the npm registry: a tag is the artifa
 **From a CDN, no install.** `browser/md2.js` is a self-contained ESM bundle with every dependency inlined, committed to the repository so a CDN can serve it straight from git. Pin a tag — never `@main` — so a page renders the same way a year from now:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Pandaismyname1/markus-md2@v0.1.1/browser/md2.standalone.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Pandaismyname1/markus-md2@v0.2.0/browser/md2.standalone.css" />
 <script type="module">
-	import { compileMd2 } from 'https://cdn.jsdelivr.net/gh/Pandaismyname1/markus-md2@v0.1.1/browser/md2.js';
+	import { compileMd2 } from 'https://cdn.jsdelivr.net/gh/Pandaismyname1/markus-md2@v0.2.0/browser/md2.js';
 
 	document.querySelector('.md2').innerHTML = await compileMd2(source);
 </script>
@@ -50,7 +50,7 @@ Two URLs, no build step, no package manager. Use `md2.standalone.css` when the h
 **For Node**, install the tag directly:
 
 ```bash
-npm install github:Pandaismyname1/markus-md2#v0.1.1
+npm install github:Pandaismyname1/markus-md2#v0.2.0
 ```
 
 That builds during install — `dist/` isn't committed — so it takes a few seconds and needs a working toolchain. Pin a tag rather than a branch; upgrading is then a one-word edit.
@@ -82,6 +82,19 @@ const { html, diagnostics } = await compileMd2WithDiagnostics(source);
 ```
 
 Codes: `MD2_UNKNOWN_DIRECTIVE`, `MD2_BAD_SEVERITY`, `MD2_FIGURE_MISSING_SRC`, `MD2_CHART_NO_DATA`, `MD2_CHART_BAD_TYPE`, `MD2_FLOW_NO_NODES`, `MD2_COMPARE_TOO_FEW_OPTIONS`, `MD2_ORPHAN_TAB`, `MD2_ORPHAN_STEP`, `MD2_ANNOTATE_RANGE_REVERSED`, `MD2_COLUMNS_NO_CHILDREN`, `MD2_ORPHAN_FENCE`, `MD2_COMPILE_THROW`.
+
+## Markdown baseline
+
+Everything under the directives is CommonMark plus [GitHub Flavored Markdown](https://github.github.com/gfm/): tables, strikethrough, task lists, autolinked URLs, and footnotes all work, inside a directive container as well as outside one.
+
+```md
+| Attribute        | Required | Meaning                                 |
+| ---------------- | :------: | --------------------------------------- |
+| `data-key`       |   yes    | Your site's public key                  |
+| `data-base-path` |    no    | Where the blog is mounted; default `/blog` |
+```
+
+Tables are styled from the same `--md2-*` tokens as the directives, and a table wider than its column scrolls rather than stretching the article. Column alignment from the delimiter row (`:---`, `:---:`, `---:`) is preserved.
 
 ## Directives
 

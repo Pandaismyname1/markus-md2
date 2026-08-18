@@ -4,6 +4,8 @@ Every directive, with the exact syntax the compiler accepts. Severities are alwa
 
 Remember the fence rule throughout: a container holding other containers needs more colons than its children (`::::steps` around `:::step`).
 
+Everything around the directives is CommonMark plus GFM — tables, strikethrough, task lists, autolinked URLs, footnotes — and those work inside a directive container too. A GFM pipe table is the right shape for a dense attribute or comparison grid; reach for `compare` when the options need weighing rather than listing.
+
 ## Contents
 
 - [Callout](#callout)

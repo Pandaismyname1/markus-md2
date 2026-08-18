@@ -6,6 +6,8 @@ Emitted `.md2-*` class names are part of the public API — they won't change ou
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-08-19
+
 ### Fixed
 
 - **Tables didn't render.** The compiler ran plain `remark-parse`, which is CommonMark and has no table syntax, so a GFM pipe table fell through as a single paragraph — the delimiter row and every `|` visible as text. `remark-gfm` is now part of the pipeline (and of the `upgradeMarkdown` parser, so both agree on where a table starts and ends), which also brings strikethrough, task lists, autolink literals and footnotes. The browser bundle grows by roughly 37 KB.
@@ -45,6 +47,7 @@ First public release. Extracted from the Markus app with no behaviour changes; a
 - **Flattened stylesheets** — `dist/md2.bundle.css` and `dist/md2.standalone.css` for `<link>` tags, inline `<style>` blocks, and sandboxes that block extra requests.
 - **Browser bundle** — `browser/md2.js`, a self-contained ESM build with every dependency inlined, committed so a CDN can serve it straight from git.
 
-[Unreleased]: https://github.com/Pandaismyname1/markus-md2/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/Pandaismyname1/markus-md2/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/Pandaismyname1/markus-md2/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/Pandaismyname1/markus-md2/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/Pandaismyname1/markus-md2/releases/tag/v0.1.0

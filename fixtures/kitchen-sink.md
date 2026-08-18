@@ -17,6 +17,7 @@ A single fixture exercising every directive in MD2 v0.2 — old and new. Use it 
 - :badge[flow]{severity=success} :jump[jump]{to=#flow}
 - :badge[chart]{severity=success} :jump[jump]{to=#chart}
 - :badge[annotate-code]{severity=blocking} :jump[jump]{to=#annotate-code}
+- :badge[tables]{severity=info} :jump[jump]{to=#tables}
 
 ::::
 
@@ -322,3 +323,24 @@ export function useOptimisticTasks(qc: QueryClient) {
 Tier 4 also added `icon` to inline badges:
 
 :badge[Required]{severity=blocking icon=warning} :badge[Optional]{severity=info icon=info} :badge[Recommended]{severity=success icon=success} :badge[Note]{severity=nit icon=tip}
+
+## Tables <a id="tables"></a>
+
+Plain GFM, no directive — alignment comes from the delimiter row, and a table wider than its column scrolls instead of stretching the page.
+
+| Attribute        | Required | Default              |     p95 |
+| ---------------- | :------: | -------------------- | ------: |
+| `data-key`       |   yes    | —                    |  412 ms |
+| `data-base-path` |    no    | `/blog`              |   38 ms |
+| `data-api`       |    no    | `https://api.md2.app` | 1.24 s |
+
+A table also works inside a container:
+
+:::callout{severity=info title="Rollout gates"}
+
+| Gate      | Owner | Status |
+| --------- | ----- | ------ |
+| Migration | data  | done   |
+| API tier  | web   | queued |
+
+:::
